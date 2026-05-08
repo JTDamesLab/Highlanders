@@ -14,10 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  :root {
-    --moss: #2d3a2e; --heather: #6b4e6f; --mist: #c4cdc1; --bone: #e8e3d8;
-    --ink: #1a1f1a; --gold: #b8935a; --gold-light: #d4ad75; --rust: #8b4a32;
-  }
+  :root { --moss: #2d3a2e; --heather: #6b4e6f; --mist: #c4cdc1; --bone: #e8e3d8; --ink: #1a1f1a; --gold: #b8935a; --gold-light: #d4ad75; --rust: #8b4a32; }
   html, body { background: var(--ink); color: var(--bone); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; overscroll-behavior: none; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
   body { background: radial-gradient(ellipse at top, rgba(107, 78, 111, 0.15) 0%, transparent 60%), radial-gradient(ellipse at bottom, rgba(45, 58, 46, 0.4) 0%, transparent 70%), linear-gradient(180deg, #1a1f1a 0%, #0f1310 100%); background-attachment: fixed; min-height: 100vh; position: relative; }
   body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.08; pointer-events: none; z-index: 1; mix-blend-mode: overlay; }
@@ -131,6 +128,7 @@
   <div class="no-results" id="noResults">Geen dieren gevonden</div>
   <div class="actions">
     <button class="btn primary" onclick="openBackup()">Backup / Herstel</button>
+    <button class="btn" onclick="reloadFailedImages()">Herlaad foto's</button>
     <button class="btn" onclick="resetAll()">Reset alles</button>
   </div>
 </div>
@@ -275,16 +273,18 @@ const data = [
 ];
 const RARITY_LABELS = ['', 'Zeer algemeen', 'Algemeen', 'Soms', 'Zeldzaam', 'Zeer zeldzaam'];
 const STORAGE_KEY = 'highlands-spotted-v2';
-const IMAGE_CACHE_KEY = 'highlands-images-v3';
+const IMAGE_CACHE_KEY = 'highlands-images-v4';
 let spotted = {};
 let imageCache = {};
 let db = null;
 let searchTerm = '';
+
 function openDB() { return new Promise((resolve) => { try { const req = indexedDB.open('highlands-spotter', 1); req.onupgradeneeded = (e) => { const d = e.target.result; if (!d.objectStoreNames.contains('state')) d.createObjectStore('state'); }; req.onsuccess = (e) => { db = e.target.result; resolve(db); }; req.onerror = () => resolve(null); } catch(e) { resolve(null); } }); }
 async function dbGet(key) { if (!db) return null; return new Promise((r) => { try { const tx = db.transaction('state', 'readonly'); const req = tx.objectStore('state').get(key); req.onsuccess = () => r(req.result); req.onerror = () => r(null); } catch(e) { r(null); } }); }
 async function dbSet(key, value) { if (!db) return; return new Promise((r) => { try { const tx = db.transaction('state', 'readwrite'); tx.objectStore('state').put(value, key); tx.oncomplete = () => r(); tx.onerror = () => r(); } catch(e) { r(); } }); }
 function setCookie(name, value) { try { const d = new Date(); d.setFullYear(d.getFullYear() + 5); document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`; } catch(e) {} }
 function getCookie(name) { try { const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : null; } catch(e) { return null; } }
+
 async function loadState() {
   const sources = [];
   try { const v = await dbGet(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
@@ -293,23 +293,73 @@ async function loadState() {
   let best = null, bestCount = -1;
   for (const s of sources) { try { const obj = JSON.parse(s); const c = Object.keys(obj).length; if (c > bestCount) { bestCount = c; best = obj; } } catch(e) {} }
   spotted = best || {};
-  try { const cached = await dbGet(IMAGE_CACHE_KEY) || localStorage.getItem(IMAGE_CACHE_KEY); if (cached) imageCache = typeof cached === 'string' ? JSON.parse(cached) : cached; } catch(e) { imageCache = {}; }
+  try { const cached = await dbGet(IMAGE_CACHE_KEY); if (cached) imageCache = typeof cached === 'string' ? JSON.parse(cached) : cached; } catch(e) {}
+  if (!imageCache || Object.keys(imageCache).length === 0) {
+    try { const ls = localStorage.getItem(IMAGE_CACHE_KEY); if (ls) imageCache = JSON.parse(ls); } catch(e) { imageCache = {}; }
+  }
 }
 async function saveState() { const json = JSON.stringify(spotted); try { localStorage.setItem(STORAGE_KEY, json); } catch(e) {} setCookie(STORAGE_KEY, json); await dbSet(STORAGE_KEY, json); }
 async function saveImageCache() { const json = JSON.stringify(imageCache); try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {} await dbSet(IMAGE_CACHE_KEY, json); }
-async function fetchImageFromWiki(wikiPage) {
-  if (imageCache[wikiPage]) return imageCache[wikiPage];
+
+// === ROBUUSTE FOTO-OPHAAL ===
+// Probeert 3 strategieën in volgorde:
+// 1. Wikipedia REST API page/summary met de wiki-naam
+// 2. Wikipedia search API om de juiste pagina te vinden via Latijnse naam
+// 3. Wikipedia search API met Engelse naam fallback
+async function fetchImageStrategy1(wikiPage) {
   try {
     const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiPage)}`;
     const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
-    if (!r.ok) throw new Error('not ok');
+    if (!r.ok) return null;
     const j = await r.json();
-    const result = { thumb: j.thumbnail?.source || null, full: j.originalimage?.source || j.thumbnail?.source || null };
-    imageCache[wikiPage] = result;
-    return result;
-  } catch(e) { return { thumb: null, full: null }; }
+    if (j.thumbnail?.source) {
+      return { thumb: j.thumbnail.source, full: j.originalimage?.source || j.thumbnail.source };
+    }
+  } catch(e) {}
+  return null;
 }
+
+async function fetchImageStrategy2(searchTerm) {
+  try {
+    // Use Wikipedia opensearch API to find the actual page
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail|original&pithumbsize=400&generator=search&gsrsearch=${encodeURIComponent(searchTerm)}&gsrlimit=1&origin=*`;
+    const r = await fetch(searchUrl);
+    if (!r.ok) return null;
+    const j = await r.json();
+    const pages = j.query?.pages;
+    if (!pages) return null;
+    const page = Object.values(pages)[0];
+    if (page?.thumbnail?.source) {
+      return { thumb: page.thumbnail.source, full: page.original?.source || page.thumbnail.source };
+    }
+  } catch(e) {}
+  return null;
+}
+
+async function fetchAnimalImage(animal) {
+  const cacheKey = animal.wiki;
+  if (imageCache[cacheKey] && imageCache[cacheKey].thumb) return imageCache[cacheKey];
+  
+  // Strategie 1: gebruik wiki-pagina-naam
+  let result = await fetchImageStrategy1(animal.wiki);
+  
+  // Strategie 2: zoek op Latijnse naam
+  if (!result && animal.latin) {
+    result = await fetchImageStrategy2(animal.latin);
+  }
+  
+  // Strategie 3: zoek op wiki naam met underscores vervangen
+  if (!result) {
+    result = await fetchImageStrategy2(animal.wiki.replace(/_/g, ' '));
+  }
+  
+  // Cache het resultaat (ook als null, om herhaalde pogingen te voorkomen tenzij user reload klikt)
+  imageCache[cacheKey] = result || { thumb: null, full: null, failed: true };
+  return imageCache[cacheKey];
+}
+
 function makeKey(c, n) { return c + '::' + n; }
+
 function render() {
   const container = document.getElementById('categories');
   container.innerHTML = '';
@@ -328,9 +378,14 @@ function render() {
       const isSpotted = !!spotted[key];
       const dots = Array.from({length: 5}, (_, i) => `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`).join('');
       const cached = imageCache[animal.wiki];
-      const imgHtml = cached && cached.thumb
-        ? `<img class="animal-img" src="${cached.thumb}" alt="${animal.name}" loading="lazy" referrerpolicy="no-referrer">`
-        : `<div class="img-loading" data-wiki="${animal.wiki}"></div>`;
+      let imgHtml;
+      if (cached && cached.thumb) {
+        imgHtml = `<img class="animal-img" src="${cached.thumb}" alt="${animal.name}" loading="lazy" referrerpolicy="no-referrer">`;
+      } else if (cached && cached.failed) {
+        imgHtml = `<div class="img-placeholder">?</div>`;
+      } else {
+        imgHtml = `<div class="img-loading" data-wiki="${animal.wiki}"></div>`;
+      }
       const el = document.createElement('div');
       el.className = 'animal' + (isSpotted ? ' spotted' : '');
       el.dataset.searchText = (animal.name + ' ' + animal.latin).toLowerCase();
@@ -347,20 +402,35 @@ function render() {
   document.getElementById('totalAnimals').textContent = totalAnimals;
   applyFilter();
 }
-async function loadAllImages() {
+
+async function loadAllImages(retryFailed = false) {
   const allAnimals = data.flatMap(c => c.animals);
-  const todo = allAnimals.filter(a => !imageCache[a.wiki]);
+  const todo = allAnimals.filter(a => {
+    const c = imageCache[a.wiki];
+    if (!c) return true;
+    if (retryFailed && c.failed) return true;
+    if (!c.thumb && !c.failed) return true;
+    return false;
+  });
   if (todo.length === 0) return;
+  
+  // Reset failed entries als we retry doen
+  if (retryFailed) {
+    todo.forEach(a => { delete imageCache[a.wiki]; });
+  }
+  
   const banner = document.getElementById('loadingBanner');
   banner.classList.add('show');
   let done = 0;
   banner.textContent = `📷 Foto's laden... 0/${todo.length}`;
-  for (let i = 0; i < todo.length; i += 5) {
-    const batch = todo.slice(i, i + 5);
+  
+  for (let i = 0; i < todo.length; i += 4) {
+    const batch = todo.slice(i, i + 4);
     await Promise.all(batch.map(async a => {
-      await fetchImageFromWiki(a.wiki);
+      await fetchAnimalImage(a);
       done++;
       banner.textContent = `📷 Foto's laden... ${done}/${todo.length}`;
+      // Update placeholder live
       document.querySelectorAll(`.img-loading[data-wiki="${a.wiki}"]`).forEach(ph => {
         const cached = imageCache[a.wiki];
         if (cached && cached.thumb) {
@@ -380,9 +450,22 @@ async function loadAllImages() {
     }));
     await saveImageCache();
   }
-  banner.textContent = `✓ Alle foto's geladen`;
-  setTimeout(() => banner.classList.remove('show'), 2000);
+  
+  const failedCount = Object.values(imageCache).filter(c => c.failed).length;
+  if (failedCount === 0) {
+    banner.textContent = `✓ Alle foto's geladen`;
+  } else {
+    banner.textContent = `✓ ${todo.length - failedCount}/${todo.length} foto's geladen`;
+  }
+  setTimeout(() => banner.classList.remove('show'), 2500);
 }
+
+async function reloadFailedImages() {
+  showToast('Faalde foto\'s opnieuw laden...');
+  await loadAllImages(true);
+  render();
+}
+
 function applyFilter() {
   const term = searchTerm.toLowerCase().trim();
   let totalVisible = 0;
@@ -398,6 +481,7 @@ function applyFilter() {
   });
   document.getElementById('noResults').classList.toggle('show', totalVisible === 0 && term.length > 0);
 }
+
 async function openLightbox(animal) {
   const img = document.getElementById('lightboxImg');
   document.getElementById('lightboxTitle').textContent = animal.name;
@@ -409,7 +493,7 @@ async function openLightbox(animal) {
   document.body.style.overflow = 'hidden';
   let cached = imageCache[animal.wiki];
   if (cached && cached.thumb) img.src = cached.thumb;
-  if (!cached || !cached.full) cached = await fetchImageFromWiki(animal.wiki);
+  if (!cached || (!cached.full && !cached.failed)) cached = await fetchAnimalImage(animal);
   if (cached && cached.full) img.src = cached.full;
 }
 function closeLightbox(e) { if (e && e.target.closest('.lightbox-content') && !e.target.classList.contains('lightbox-close')) return; document.getElementById('lightbox').classList.remove('show'); document.body.style.overflow = ''; }
