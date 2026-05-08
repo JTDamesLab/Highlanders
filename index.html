@@ -22,7 +22,9 @@
   body { background: radial-gradient(ellipse at top, rgba(107, 78, 111, 0.15) 0%, transparent 60%), radial-gradient(ellipse at bottom, rgba(45, 58, 46, 0.4) 0%, transparent 70%), linear-gradient(180deg, #1a1f1a 0%, #0f1310 100%); background-attachment: fixed; min-height: 100vh; position: relative; }
   body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.08; pointer-events: none; z-index: 1; mix-blend-mode: overlay; }
   .container { max-width: 640px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 2; }
-  header { text-align: center; padding: 20px 0 24px; border-bottom: 1px solid rgba(232, 227, 216, 0.12); margin-bottom: 20px; }
+  header { text-align: center; padding: 12px 0 24px; border-bottom: 1px solid rgba(232, 227, 216, 0.12); margin-bottom: 20px; }
+  .crest { width: 180px; height: auto; margin: 0 auto 18px; display: block; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5)); animation: crestFade 0.8s ease-out; }
+  @keyframes crestFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
   .eyebrow { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 12px; }
   h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 38px; line-height: 1; letter-spacing: -0.01em; color: var(--bone); }
   h1 em { font-style: italic; color: var(--mist); }
@@ -101,12 +103,13 @@
   .modal-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1200; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
   .toast.show { opacity: 1; }
-  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } }
+  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } .crest { width: 150px; } }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
+    <img class="crest" src="wapen.PNG" alt="Familiewapen Dames van de Wijdeven">
     <div class="eyebrow">Field Guide · 2026</div>
     <h1>Highlands<br><em>Wildlife Spotter</em></h1>
     <div class="subtitle">a journal of creatures of the Scottish wilds</div>
@@ -157,7 +160,6 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-// Dieren — wikiPage = exacte Engelse Wikipedia paginanaam (gebruikt voor API lookup)
 const data = [
   { name: 'Boerderijdieren', icon: '🐓', animals: [
     { name: 'Schaap', latin: 'Ovis aries', rarity: 1, wiki: 'Sheep' },
@@ -278,81 +280,23 @@ let spotted = {};
 let imageCache = {};
 let db = null;
 let searchTerm = '';
-
-function openDB() {
-  return new Promise((resolve) => {
-    try {
-      const req = indexedDB.open('highlands-spotter', 1);
-      req.onupgradeneeded = (e) => {
-        const d = e.target.result;
-        if (!d.objectStoreNames.contains('state')) d.createObjectStore('state');
-      };
-      req.onsuccess = (e) => { db = e.target.result; resolve(db); };
-      req.onerror = () => resolve(null);
-    } catch(e) { resolve(null); }
-  });
-}
-async function dbGet(key) {
-  if (!db) return null;
-  return new Promise((r) => {
-    try {
-      const tx = db.transaction('state', 'readonly');
-      const req = tx.objectStore('state').get(key);
-      req.onsuccess = () => r(req.result);
-      req.onerror = () => r(null);
-    } catch(e) { r(null); }
-  });
-}
-async function dbSet(key, value) {
-  if (!db) return;
-  return new Promise((r) => {
-    try {
-      const tx = db.transaction('state', 'readwrite');
-      tx.objectStore('state').put(value, key);
-      tx.oncomplete = () => r();
-      tx.onerror = () => r();
-    } catch(e) { r(); }
-  });
-}
-function setCookie(name, value) {
-  try {
-    const d = new Date(); d.setFullYear(d.getFullYear() + 5);
-    document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
-  } catch(e) {}
-}
-function getCookie(name) {
-  try { const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : null; } catch(e) { return null; }
-}
+function openDB() { return new Promise((resolve) => { try { const req = indexedDB.open('highlands-spotter', 1); req.onupgradeneeded = (e) => { const d = e.target.result; if (!d.objectStoreNames.contains('state')) d.createObjectStore('state'); }; req.onsuccess = (e) => { db = e.target.result; resolve(db); }; req.onerror = () => resolve(null); } catch(e) { resolve(null); } }); }
+async function dbGet(key) { if (!db) return null; return new Promise((r) => { try { const tx = db.transaction('state', 'readonly'); const req = tx.objectStore('state').get(key); req.onsuccess = () => r(req.result); req.onerror = () => r(null); } catch(e) { r(null); } }); }
+async function dbSet(key, value) { if (!db) return; return new Promise((r) => { try { const tx = db.transaction('state', 'readwrite'); tx.objectStore('state').put(value, key); tx.oncomplete = () => r(); tx.onerror = () => r(); } catch(e) { r(); } }); }
+function setCookie(name, value) { try { const d = new Date(); d.setFullYear(d.getFullYear() + 5); document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`; } catch(e) {} }
+function getCookie(name) { try { const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : null; } catch(e) { return null; } }
 async function loadState() {
   const sources = [];
   try { const v = await dbGet(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
   try { const v = localStorage.getItem(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
   const ck = getCookie(STORAGE_KEY); if (ck) sources.push(ck);
   let best = null, bestCount = -1;
-  for (const s of sources) {
-    try { const obj = JSON.parse(s); const c = Object.keys(obj).length; if (c > bestCount) { bestCount = c; best = obj; } } catch(e) {}
-  }
+  for (const s of sources) { try { const obj = JSON.parse(s); const c = Object.keys(obj).length; if (c > bestCount) { bestCount = c; best = obj; } } catch(e) {} }
   spotted = best || {};
-  
-  // Load image cache
-  try {
-    const cached = await dbGet(IMAGE_CACHE_KEY) || localStorage.getItem(IMAGE_CACHE_KEY);
-    if (cached) imageCache = JSON.parse(cached);
-  } catch(e) { imageCache = {}; }
+  try { const cached = await dbGet(IMAGE_CACHE_KEY) || localStorage.getItem(IMAGE_CACHE_KEY); if (cached) imageCache = typeof cached === 'string' ? JSON.parse(cached) : cached; } catch(e) { imageCache = {}; }
 }
-async function saveState() {
-  const json = JSON.stringify(spotted);
-  try { localStorage.setItem(STORAGE_KEY, json); } catch(e) {}
-  setCookie(STORAGE_KEY, json);
-  await dbSet(STORAGE_KEY, json);
-}
-async function saveImageCache() {
-  const json = JSON.stringify(imageCache);
-  try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {}
-  await dbSet(IMAGE_CACHE_KEY, json);
-}
-
-// Wikipedia REST API: page/summary geeft thumbnail + originalimage
+async function saveState() { const json = JSON.stringify(spotted); try { localStorage.setItem(STORAGE_KEY, json); } catch(e) {} setCookie(STORAGE_KEY, json); await dbSet(STORAGE_KEY, json); }
+async function saveImageCache() { const json = JSON.stringify(imageCache); try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {} await dbSet(IMAGE_CACHE_KEY, json); }
 async function fetchImageFromWiki(wikiPage) {
   if (imageCache[wikiPage]) return imageCache[wikiPage];
   try {
@@ -360,19 +304,12 @@ async function fetchImageFromWiki(wikiPage) {
     const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
     if (!r.ok) throw new Error('not ok');
     const j = await r.json();
-    const result = {
-      thumb: j.thumbnail?.source || null,
-      full: j.originalimage?.source || j.thumbnail?.source || null
-    };
+    const result = { thumb: j.thumbnail?.source || null, full: j.originalimage?.source || j.thumbnail?.source || null };
     imageCache[wikiPage] = result;
     return result;
-  } catch(e) {
-    return { thumb: null, full: null };
-  }
+  } catch(e) { return { thumb: null, full: null }; }
 }
-
 function makeKey(c, n) { return c + '::' + n; }
-
 function render() {
   const container = document.getElementById('categories');
   container.innerHTML = '';
@@ -398,14 +335,7 @@ function render() {
       el.className = 'animal' + (isSpotted ? ' spotted' : '');
       el.dataset.searchText = (animal.name + ' ' + animal.latin).toLowerCase();
       el.innerHTML = `<div class="animal-img-wrap">${imgHtml}</div><div class="animal-info"><div class="animal-name">${animal.name}</div><div class="animal-latin">${animal.latin}</div><div class="rarity">${dots}</div></div><div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>`;
-      const toggleSpot = async (e) => {
-        e.stopPropagation();
-        if (spotted[key]) delete spotted[key];
-        else { spotted[key] = Date.now(); if (navigator.vibrate) navigator.vibrate(15); }
-        await saveState();
-        render();
-        applyFilter();
-      };
+      const toggleSpot = async (e) => { e.stopPropagation(); if (spotted[key]) delete spotted[key]; else { spotted[key] = Date.now(); if (navigator.vibrate) navigator.vibrate(15); } await saveState(); render(); applyFilter(); };
       el.querySelector('.animal-info').addEventListener('click', toggleSpot);
       el.querySelector('.check').addEventListener('click', toggleSpot);
       el.querySelector('.animal-img-wrap').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(animal); });
@@ -417,7 +347,6 @@ function render() {
   document.getElementById('totalAnimals').textContent = totalAnimals;
   applyFilter();
 }
-
 async function loadAllImages() {
   const allAnimals = data.flatMap(c => c.animals);
   const todo = allAnimals.filter(a => !imageCache[a.wiki]);
@@ -426,14 +355,12 @@ async function loadAllImages() {
   banner.classList.add('show');
   let done = 0;
   banner.textContent = `📷 Foto's laden... 0/${todo.length}`;
-  // Batches van 5 om Wikipedia niet te overbelasten
   for (let i = 0; i < todo.length; i += 5) {
     const batch = todo.slice(i, i + 5);
     await Promise.all(batch.map(async a => {
       await fetchImageFromWiki(a.wiki);
       done++;
       banner.textContent = `📷 Foto's laden... ${done}/${todo.length}`;
-      // Update placeholders live
       document.querySelectorAll(`.img-loading[data-wiki="${a.wiki}"]`).forEach(ph => {
         const cached = imageCache[a.wiki];
         if (cached && cached.thumb) {
@@ -456,7 +383,6 @@ async function loadAllImages() {
   banner.textContent = `✓ Alle foto's geladen`;
   setTimeout(() => banner.classList.remove('show'), 2000);
 }
-
 function applyFilter() {
   const term = searchTerm.toLowerCase().trim();
   let totalVisible = 0;
@@ -472,7 +398,6 @@ function applyFilter() {
   });
   document.getElementById('noResults').classList.toggle('show', totalVisible === 0 && term.length > 0);
 }
-
 async function openLightbox(animal) {
   const img = document.getElementById('lightboxImg');
   document.getElementById('lightboxTitle').textContent = animal.name;
@@ -482,72 +407,21 @@ async function openLightbox(animal) {
   document.getElementById('lightboxRarityLabel').textContent = RARITY_LABELS[animal.rarity];
   document.getElementById('lightbox').classList.add('show');
   document.body.style.overflow = 'hidden';
-  
   let cached = imageCache[animal.wiki];
   if (cached && cached.thumb) img.src = cached.thumb;
   if (!cached || !cached.full) cached = await fetchImageFromWiki(animal.wiki);
   if (cached && cached.full) img.src = cached.full;
 }
-
-function closeLightbox(e) {
-  if (e && e.target.closest('.lightbox-content') && !e.target.classList.contains('lightbox-close')) return;
-  document.getElementById('lightbox').classList.remove('show');
-  document.body.style.overflow = '';
-}
-async function resetAll() {
-  if (confirm('Alle gespotte dieren wissen?')) {
-    spotted = {};
-    await saveState();
-    document.cookie = `${STORAGE_KEY}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    render();
-  }
-}
-function openBackup() {
-  document.getElementById('backupCode').value = btoa(JSON.stringify(spotted));
-  document.getElementById('backupModal').classList.add('show');
-}
+function closeLightbox(e) { if (e && e.target.closest('.lightbox-content') && !e.target.classList.contains('lightbox-close')) return; document.getElementById('lightbox').classList.remove('show'); document.body.style.overflow = ''; }
+async function resetAll() { if (confirm('Alle gespotte dieren wissen?')) { spotted = {}; await saveState(); document.cookie = `${STORAGE_KEY}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`; render(); } }
+function openBackup() { document.getElementById('backupCode').value = btoa(JSON.stringify(spotted)); document.getElementById('backupModal').classList.add('show'); }
 function closeBackup() { document.getElementById('backupModal').classList.remove('show'); }
-async function copyBackup() {
-  const ta = document.getElementById('backupCode'); ta.select();
-  try { await navigator.clipboard.writeText(ta.value); showToast('Gekopieerd!'); }
-  catch(e) { document.execCommand('copy'); showToast('Gekopieerd'); }
-}
-async function restoreBackup() {
-  const code = document.getElementById('backupCode').value.trim();
-  if (!code) { showToast('Plak eerst een code'); return; }
-  try {
-    const obj = JSON.parse(atob(code));
-    if (typeof obj !== 'object') throw new Error();
-    spotted = obj;
-    await saveState();
-    render();
-    closeBackup();
-    showToast(`Hersteld: ${Object.keys(obj).length} vinkjes`);
-  } catch(e) { showToast('Ongeldige code'); }
-}
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
-  searchTerm = '';
-  document.getElementById('searchClear').classList.remove('show');
-  applyFilter();
-}
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  searchTerm = e.target.value;
-  document.getElementById('searchClear').classList.toggle('show', searchTerm.length > 0);
-  applyFilter();
-});
-(async () => {
-  await openDB();
-  await loadState();
-  render();
-  loadAllImages();
-})();
+async function copyBackup() { const ta = document.getElementById('backupCode'); ta.select(); try { await navigator.clipboard.writeText(ta.value); showToast('Gekopieerd!'); } catch(e) { document.execCommand('copy'); showToast('Gekopieerd'); } }
+async function restoreBackup() { const code = document.getElementById('backupCode').value.trim(); if (!code) { showToast('Plak eerst een code'); return; } try { const obj = JSON.parse(atob(code)); if (typeof obj !== 'object') throw new Error(); spotted = obj; await saveState(); render(); closeBackup(); showToast(`Hersteld: ${Object.keys(obj).length} vinkjes`); } catch(e) { showToast('Ongeldige code'); } }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+function clearSearch() { document.getElementById('searchInput').value = ''; searchTerm = ''; document.getElementById('searchClear').classList.remove('show'); applyFilter(); }
+document.getElementById('searchInput').addEventListener('input', (e) => { searchTerm = e.target.value; document.getElementById('searchClear').classList.toggle('show', searchTerm.length > 0); applyFilter(); });
+(async () => { await openDB(); await loadState(); render(); loadAllImages(); })();
 </script>
 </body>
 </html>
