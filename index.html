@@ -18,24 +18,9 @@
     --moss: #2d3a2e; --heather: #6b4e6f; --mist: #c4cdc1; --bone: #e8e3d8;
     --ink: #1a1f1a; --gold: #b8935a; --gold-light: #d4ad75; --rust: #8b4a32;
   }
-  html, body {
-    background: var(--ink); color: var(--bone);
-    font-family: 'Inter', -apple-system, sans-serif;
-    min-height: 100vh; overscroll-behavior: none;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  }
-  body {
-    background:
-      radial-gradient(ellipse at top, rgba(107, 78, 111, 0.15) 0%, transparent 60%),
-      radial-gradient(ellipse at bottom, rgba(45, 58, 46, 0.4) 0%, transparent 70%),
-      linear-gradient(180deg, #1a1f1a 0%, #0f1310 100%);
-    background-attachment: fixed; min-height: 100vh; position: relative;
-  }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-    opacity: 0.08; pointer-events: none; z-index: 1; mix-blend-mode: overlay;
-  }
+  html, body { background: var(--ink); color: var(--bone); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; overscroll-behavior: none; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  body { background: radial-gradient(ellipse at top, rgba(107, 78, 111, 0.15) 0%, transparent 60%), radial-gradient(ellipse at bottom, rgba(45, 58, 46, 0.4) 0%, transparent 70%), linear-gradient(180deg, #1a1f1a 0%, #0f1310 100%); background-attachment: fixed; min-height: 100vh; position: relative; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E"); opacity: 0.08; pointer-events: none; z-index: 1; mix-blend-mode: overlay; }
   .container { max-width: 640px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 2; }
   header { text-align: center; padding: 20px 0 24px; border-bottom: 1px solid rgba(232, 227, 216, 0.12); margin-bottom: 20px; }
   .eyebrow { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 12px; }
@@ -46,72 +31,35 @@
   .stat { text-align: center; }
   .stat-num { font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1; }
   .stat-label { font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-top: 6px; }
-  .search-wrap {
-    position: sticky; top: env(safe-area-inset-top); z-index: 10;
-    background: linear-gradient(180deg, #1a1f1a 0%, #1a1f1a 80%, transparent 100%);
-    padding: 12px 0 16px; margin-bottom: 16px;
-  }
-  .search-input {
-    width: 100%;
-    padding: 12px 16px 12px 40px;
-    background: rgba(232, 227, 216, 0.06);
-    border: 1px solid rgba(232, 227, 216, 0.15);
-    border-radius: 4px;
-    color: var(--bone);
-    font-family: 'Inter', sans-serif; font-size: 14px;
-    -webkit-appearance: none;
-  }
+  .loading-banner { background: rgba(184, 147, 90, 0.1); border: 1px solid rgba(184, 147, 90, 0.3); color: var(--gold); text-align: center; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; font-size: 12px; display: none; }
+  .loading-banner.show { display: block; }
+  .search-wrap { position: sticky; top: env(safe-area-inset-top); z-index: 10; background: linear-gradient(180deg, #1a1f1a 0%, #1a1f1a 80%, transparent 100%); padding: 12px 0 16px; margin-bottom: 16px; }
+  .search-input-wrap { position: relative; }
+  .search-input { width: 100%; padding: 12px 16px 12px 40px; background: rgba(232, 227, 216, 0.06); border: 1px solid rgba(232, 227, 216, 0.15); border-radius: 4px; color: var(--bone); font-family: 'Inter', sans-serif; font-size: 14px; -webkit-appearance: none; }
   .search-input::placeholder { color: var(--mist); opacity: 0.5; }
   .search-input:focus { outline: none; border-color: var(--gold); background: rgba(232, 227, 216, 0.08); }
-  .search-icon {
-    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-    width: 16px; height: 16px; opacity: 0.5; pointer-events: none;
-  }
-  .search-clear {
-    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    width: 22px; height: 22px; border-radius: 50%;
-    background: rgba(232, 227, 216, 0.15); border: none;
-    color: var(--bone); font-size: 14px; line-height: 1;
-    display: none; cursor: pointer;
-  }
+  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; opacity: 0.5; pointer-events: none; }
+  .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; background: rgba(232, 227, 216, 0.15); border: none; color: var(--bone); font-size: 14px; line-height: 1; display: none; cursor: pointer; }
   .search-clear.show { display: flex; align-items: center; justify-content: center; }
-  .search-input-wrap { position: relative; }
   .category { margin-bottom: 36px; }
   .category.hidden { display: none; }
   .category-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(232, 227, 216, 0.08); }
   .category-icon { font-size: 18px; opacity: 0.8; }
-  .category-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--bone); letter-spacing: 0.01em; }
+  .category-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--bone); }
   .category-count { margin-left: auto; font-size: 10px; letter-spacing: 0.2em; color: var(--mist); opacity: 0.5; text-transform: uppercase; }
   .animal-list { display: flex; flex-direction: column; gap: 10px; }
-  .animal {
-    display: flex; align-items: center; gap: 14px; padding: 12px;
-    background: rgba(232, 227, 216, 0.03);
-    border: 1px solid rgba(232, 227, 216, 0.08);
-    border-radius: 4px; transition: all 0.3s ease;
-    position: relative; overflow: hidden;
-  }
+  .animal { display: flex; align-items: center; gap: 14px; padding: 12px; background: rgba(232, 227, 216, 0.03); border: 1px solid rgba(232, 227, 216, 0.08); border-radius: 4px; transition: all 0.3s ease; position: relative; overflow: hidden; }
   .animal.hidden { display: none; }
-  .animal::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--gold); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: top;
-  }
+  .animal::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: top; }
   .animal.spotted { background: rgba(184, 147, 90, 0.08); border-color: rgba(184, 147, 90, 0.3); }
   .animal.spotted::before { transform: scaleY(1); }
-  .animal-img-wrap {
-    width: 64px; height: 64px; border-radius: 3px;
-    background: linear-gradient(135deg, var(--moss) 0%, #1f2920 100%);
-    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s ease; cursor: zoom-in;
-    position: relative; overflow: hidden;
-  }
+  .animal-img-wrap { width: 64px; height: 64px; border-radius: 3px; background: linear-gradient(135deg, var(--moss) 0%, #1f2920 100%); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; cursor: zoom-in; position: relative; overflow: hidden; }
   .animal-img-wrap:active { transform: scale(0.95); }
-  .animal-img {
-    width: 100%; height: 100%; object-fit: cover;
-    filter: saturate(0.9) contrast(1.05);
-    transition: filter 0.4s ease, opacity 0.3s ease;
-  }
+  .animal-img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.9) contrast(1.05); transition: filter 0.4s ease, opacity 0.3s ease; }
   .animal.spotted .animal-img { filter: saturate(1.1) contrast(1.05); }
-  .animal-img.fallback { object-fit: contain; padding: 6px; }
+  .img-loading { width: 16px; height: 16px; border: 1.5px solid rgba(184, 147, 90, 0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .img-placeholder { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 28px; font-style: italic; opacity: 0.5; }
   .animal-info { flex: 1; min-width: 0; cursor: pointer; }
   .animal-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--bone); line-height: 1.2; transition: color 0.3s ease; }
   .animal.spotted .animal-name { color: var(--gold); }
@@ -119,58 +67,23 @@
   .rarity { display: flex; gap: 2px; margin-top: 6px; }
   .rarity-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--mist); opacity: 0.2; }
   .rarity-dot.filled { opacity: 0.7; background: var(--gold); }
-  .check {
-    width: 28px; height: 28px;
-    border: 1.5px solid rgba(232, 227, 216, 0.25);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all 0.3s ease;
-    background: transparent; cursor: pointer;
-  }
+  .check { width: 28px; height: 28px; border: 1.5px solid rgba(232, 227, 216, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s ease; background: transparent; cursor: pointer; }
   .animal.spotted .check { border-color: var(--gold); background: var(--gold); }
   .check svg { width: 14px; height: 14px; stroke: var(--ink); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(0.5); transition: all 0.3s ease; }
   .animal.spotted .check svg { opacity: 1; transform: scale(1); }
   .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 32px auto 0; }
-  .btn {
-    padding: 10px 20px; background: transparent;
-    border: 1px solid rgba(232, 227, 216, 0.2);
-    color: var(--mist);
-    font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
-    border-radius: 2px; cursor: pointer;
-  }
+  .btn { padding: 10px 20px; background: transparent; border: 1px solid rgba(232, 227, 216, 0.2); color: var(--mist); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
   .btn:active { background: rgba(232, 227, 216, 0.05); }
   .btn.primary { border-color: var(--gold); color: var(--gold); }
   .ornament { text-align: center; color: var(--gold); opacity: 0.4; margin: 8px 0 0; font-size: 14px; letter-spacing: 0.5em; }
-  .no-results {
-    text-align: center; padding: 60px 20px;
-    color: var(--mist); opacity: 0.6;
-    font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px;
-    display: none;
-  }
+  .no-results { text-align: center; padding: 60px 20px; color: var(--mist); opacity: 0.6; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; display: none; }
   .no-results.show { display: block; }
-  .lightbox {
-    position: fixed; inset: 0;
-    background: rgba(10, 13, 10, 0.96);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    z-index: 1000; display: none; align-items: center; justify-content: center;
-    padding: 24px;
-    padding-top: max(60px, env(safe-area-inset-top));
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-    animation: fadeIn 0.25s ease;
-  }
+  .lightbox { position: fixed; inset: 0; background: rgba(10, 13, 10, 0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; padding-top: max(60px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); animation: fadeIn 0.25s ease; }
   .lightbox.show { display: flex; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .lightbox-content { max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-  .lightbox-img-wrap {
-    width: min(85vw, 420px); height: min(85vw, 420px);
-    background: linear-gradient(135deg, var(--moss) 0%, #1f2920 100%);
-    border-radius: 8px; overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    display: flex; align-items: center; justify-content: center;
-  }
+  .lightbox-img-wrap { width: min(85vw, 420px); height: min(85vw, 420px); background: linear-gradient(135deg, var(--moss) 0%, #1f2920 100%); border-radius: 8px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: center; justify-content: center; }
   .lightbox-img { width: 100%; height: 100%; object-fit: cover; }
-  .lightbox-img.fallback { object-fit: contain; padding: 30px; }
   @keyframes zoomIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   .lightbox-caption { text-align: center; color: var(--bone); max-width: 480px; }
   .lightbox-caption h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin-bottom: 4px; }
@@ -178,56 +91,17 @@
   .lightbox-caption .rarity-large { display: flex; gap: 5px; justify-content: center; margin-top: 8px; }
   .lightbox-caption .rarity-large .rarity-dot { width: 7px; height: 7px; }
   .lightbox-caption .rarity-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); opacity: 0.5; margin-top: 14px; }
-  .lightbox-close {
-    position: absolute; top: max(20px, env(safe-area-inset-top)); right: 20px;
-    width: 40px; height: 40px; border-radius: 50%;
-    background: rgba(232, 227, 216, 0.1);
-    border: 1px solid rgba(232, 227, 216, 0.2);
-    color: var(--bone); font-size: 22px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; line-height: 1;
-  }
-  .modal {
-    position: fixed; inset: 0;
-    background: rgba(10, 13, 10, 0.96);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    z-index: 1100; display: none; align-items: center; justify-content: center;
-    padding: 24px;
-    padding-top: max(40px, env(safe-area-inset-top));
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-  }
+  .lightbox-close { position: absolute; top: max(20px, env(safe-area-inset-top)); right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(232, 227, 216, 0.1); border: 1px solid rgba(232, 227, 216, 0.2); color: var(--bone); font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; line-height: 1; }
+  .modal { position: fixed; inset: 0; background: rgba(10, 13, 10, 0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1100; display: none; align-items: center; justify-content: center; padding: 24px; padding-top: max(40px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); }
   .modal.show { display: flex; }
-  .modal-content {
-    background: linear-gradient(135deg, #1f2920 0%, #161a17 100%);
-    border: 1px solid rgba(232, 227, 216, 0.15);
-    border-radius: 6px; padding: 28px 24px;
-    max-width: 480px; width: 100%;
-    max-height: 80vh; overflow-y: auto;
-  }
+  .modal-content { background: linear-gradient(135deg, #1f2920 0%, #161a17 100%); border: 1px solid rgba(232, 227, 216, 0.15); border-radius: 6px; padding: 28px 24px; max-width: 480px; width: 100%; max-height: 80vh; overflow-y: auto; }
   .modal h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--bone); margin-bottom: 12px; }
   .modal p { font-size: 13px; line-height: 1.6; color: var(--mist); opacity: 0.85; margin-bottom: 14px; }
-  .modal textarea {
-    width: 100%; min-height: 120px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(232, 227, 216, 0.15);
-    border-radius: 3px; color: var(--bone);
-    font-family: 'Inter', monospace; font-size: 11px;
-    padding: 10px; resize: vertical;
-  }
+  .modal textarea { width: 100%; min-height: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(232, 227, 216, 0.15); border-radius: 3px; color: var(--bone); font-family: monospace; font-size: 11px; padding: 10px; resize: vertical; }
   .modal-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-  .toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    background: var(--gold); color: var(--ink);
-    padding: 10px 18px; border-radius: 4px;
-    font-size: 12px; letter-spacing: 0.05em; font-weight: 500;
-    z-index: 1200; opacity: 0; transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1200; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
   .toast.show { opacity: 1; }
-  @media (max-width: 380px) {
-    h1 { font-size: 32px; }
-    .animal-img-wrap { width: 56px; height: 56px; }
-  }
+  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } }
 </style>
 </head>
 <body>
@@ -242,6 +116,7 @@
       <div class="stat"><div class="stat-num" id="totalAnimals">0</div><div class="stat-label">Totaal</div></div>
     </div>
   </header>
+  <div class="loading-banner" id="loadingBanner">📷 Foto's worden geladen...</div>
   <div class="search-wrap">
     <div class="search-input-wrap">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -257,11 +132,9 @@
   </div>
 </div>
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Sluiten">×</button>
+  <button class="lightbox-close" onclick="closeLightbox(event)">×</button>
   <div class="lightbox-content" onclick="event.stopPropagation()">
-    <div class="lightbox-img-wrap">
-      <img class="lightbox-img" id="lightboxImg" alt="" referrerpolicy="no-referrer">
-    </div>
+    <div class="lightbox-img-wrap"><img class="lightbox-img" id="lightboxImg" alt="" referrerpolicy="no-referrer"></div>
     <div class="lightbox-caption">
       <h3 id="lightboxTitle"></h3>
       <div class="latin" id="lightboxLatin"></div>
@@ -273,139 +146,139 @@
 <div class="modal" id="backupModal">
   <div class="modal-content">
     <h2>Backup &amp; Herstel</h2>
-    <p>Sla je voortgang veilig op of plak een eerdere code terug om te herstellen. Tik <b>Kopieer</b> en plak de tekst in een notitie of stuur 'm naar jezelf — dan ben je nooit je vinkjes kwijt.</p>
+    <p>Sla je voortgang op of plak een eerdere code terug om te herstellen.</p>
     <textarea id="backupCode" spellcheck="false" autocapitalize="off"></textarea>
     <div class="modal-actions">
       <button class="btn primary" onclick="copyBackup()">Kopieer</button>
-      <button class="btn" onclick="restoreBackup()">Herstel uit code</button>
+      <button class="btn" onclick="restoreBackup()">Herstel</button>
       <button class="btn" onclick="closeBackup()">Sluit</button>
     </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 <script>
-const SVG_FALLBACK = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%232d3a2e'/><text x='50' y='58' text-anchor='middle' fill='%23b8935a' font-family='serif' font-size='40' font-style='italic'>?</text></svg>`;
-function fp(filename, width = 400) {
-  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=${width}`;
-}
+// Dieren — wikiPage = exacte Engelse Wikipedia paginanaam (gebruikt voor API lookup)
 const data = [
   { name: 'Boerderijdieren', icon: '🐓', animals: [
-    { name: 'Schaap', latin: 'Ovis aries', rarity: 1, file: 'Schwarzkopfschaf 2.jpg' },
-    { name: 'Highland koe', latin: 'Bos taurus', rarity: 1, file: 'Highland Cattle Schottland 2007 b.jpg' },
-    { name: 'Koe (Holstein)', latin: 'Bos taurus', rarity: 1, file: 'Cow female black white.jpg' },
-    { name: 'Paard', latin: 'Equus caballus', rarity: 1, file: 'Nokota Horses cropped.jpg' },
-    { name: 'Pony (Highland)', latin: 'Equus caballus', rarity: 2, file: 'Highland Pony stallion.jpg' },
-    { name: 'Shetland pony', latin: 'Equus caballus', rarity: 3, file: 'Shetland Pony 600.jpg' },
-    { name: 'Geit', latin: 'Capra hircus', rarity: 2, file: 'Hausziege 04.jpg' },
-    { name: 'Ezel', latin: 'Equus asinus', rarity: 3, file: 'Donkey 1 arp 750px.jpg' },
-    { name: 'Lama / alpaca', latin: 'Lama glama', rarity: 4, file: 'Lama glama 03 by Line1.jpg' },
-    { name: 'Kip', latin: 'Gallus gallus domesticus', rarity: 1, file: 'Hen and chicks02.jpg' },
-    { name: 'Haan', latin: 'Gallus gallus domesticus', rarity: 2, file: 'Hahn querformat.jpg' },
-    { name: 'Eend', latin: 'Anas platyrhynchos', rarity: 1, file: 'Anas platyrhynchos male female quadrat.jpg' },
-    { name: 'Gans', latin: 'Anser anser', rarity: 2, file: 'Anser anser 1 (Lukasz Lukasik).jpg' },
-    { name: 'Hond (border collie)', latin: 'Canis familiaris', rarity: 1, file: 'Border-Collie-mit-Schafe.jpg' },
+    { name: 'Schaap', latin: 'Ovis aries', rarity: 1, wiki: 'Sheep' },
+    { name: 'Highland koe', latin: 'Bos taurus', rarity: 1, wiki: 'Highland_cattle' },
+    { name: 'Koe (Holstein)', latin: 'Bos taurus', rarity: 1, wiki: 'Holstein_Friesian_cattle' },
+    { name: 'Paard', latin: 'Equus caballus', rarity: 1, wiki: 'Horse' },
+    { name: 'Highland pony', latin: 'Equus caballus', rarity: 2, wiki: 'Highland_pony' },
+    { name: 'Shetland pony', latin: 'Equus caballus', rarity: 3, wiki: 'Shetland_pony' },
+    { name: 'Geit', latin: 'Capra hircus', rarity: 2, wiki: 'Goat' },
+    { name: 'Ezel', latin: 'Equus asinus', rarity: 3, wiki: 'Donkey' },
+    { name: 'Lama', latin: 'Lama glama', rarity: 4, wiki: 'Llama' },
+    { name: 'Kip', latin: 'Gallus gallus domesticus', rarity: 1, wiki: 'Chicken' },
+    { name: 'Haan', latin: 'Gallus gallus domesticus', rarity: 2, wiki: 'Rooster' },
+    { name: 'Eend', latin: 'Anas platyrhynchos', rarity: 1, wiki: 'Mallard' },
+    { name: 'Gans', latin: 'Anser anser', rarity: 2, wiki: 'Greylag_goose' },
+    { name: 'Border collie', latin: 'Canis familiaris', rarity: 1, wiki: 'Border_Collie' },
   ]},
   { name: 'Wilde zoogdieren', icon: '🦌', animals: [
-    { name: 'Konijn', latin: 'Oryctolagus cuniculus', rarity: 1, file: 'Wild rabbit us.jpg' },
-    { name: 'Eekhoorn (grijs)', latin: 'Sciurus carolinensis', rarity: 2, file: "Eastern Grey Squirrel in St James's Park, London - Nov 2006 edit.jpg" },
-    { name: 'Edelhert', latin: 'Cervus elaphus', rarity: 2, file: 'Red deer stag 2009 denmark.jpg' },
-    { name: 'Ree', latin: 'Capreolus capreolus', rarity: 2, file: 'Roe Deer (Capreolus capreolus) male 8.jpg' },
-    { name: 'Mol', latin: 'Talpa europaea', rarity: 2, file: 'Maulwurf2.jpg' },
-    { name: 'Bruine haas', latin: 'Lepus europaeus', rarity: 2, file: 'Lepus europaeus (Causse Méjean, Lozère)-2.jpg' },
-    { name: 'Vos', latin: 'Vulpes vulpes', rarity: 3, file: 'Vulpes vulpes ssp fulvus.jpg' },
-    { name: 'Rode eekhoorn', latin: 'Sciurus vulgaris', rarity: 3, file: 'Sciurus vulgaris -British woodland-8.jpg' },
-    { name: 'Sikahert', latin: 'Cervus nippon', rarity: 3, file: 'Sika deer (Cervus nippon).jpg' },
-    { name: 'Damhert', latin: 'Dama dama', rarity: 3, file: 'Fallow.deer.altanier.arp.jpg' },
-    { name: 'Wezel', latin: 'Mustela nivalis', rarity: 3, file: 'Mustela nivalis -British Wildlife Centre-4.jpg' },
-    { name: 'Berghaas', latin: 'Lepus timidus', rarity: 3, file: 'Mountain Hare (Lepus timidus) (8478003540).jpg' },
-    { name: 'Hermelijn', latin: 'Mustela erminea', rarity: 4, file: 'Mustela erminea upright.jpg' },
-    { name: 'Bunzing', latin: 'Mustela putorius', rarity: 4, file: 'Iltis-im-winter.jpg' },
-    { name: 'Das', latin: 'Meles meles', rarity: 4, file: 'Meles meles 4.jpg' },
-    { name: 'Otter', latin: 'Lutra lutra', rarity: 4, file: 'Fischotter, Lutra Lutra.JPG' },
-    { name: 'Rendier (Cairngorms)', latin: 'Rangifer tarandus', rarity: 5, file: 'Reindeer, Cairngorm - geograph.org.uk - 681360.jpg' },
-    { name: 'Boommarter', latin: 'Martes martes', rarity: 5, file: 'Pine Marten (Martes martes) at Glen Rosa, Arran.jpg' },
-    { name: 'Schotse wilde kat', latin: 'Felis silvestris', rarity: 5, file: 'Wildcat in Cairngorms NP.jpg' },
+    { name: 'Konijn', latin: 'Oryctolagus cuniculus', rarity: 1, wiki: 'European_rabbit' },
+    { name: 'Eekhoorn (grijs)', latin: 'Sciurus carolinensis', rarity: 2, wiki: 'Eastern_gray_squirrel' },
+    { name: 'Edelhert', latin: 'Cervus elaphus', rarity: 2, wiki: 'Red_deer' },
+    { name: 'Ree', latin: 'Capreolus capreolus', rarity: 2, wiki: 'Roe_deer' },
+    { name: 'Mol', latin: 'Talpa europaea', rarity: 2, wiki: 'European_mole' },
+    { name: 'Bruine haas', latin: 'Lepus europaeus', rarity: 2, wiki: 'European_hare' },
+    { name: 'Vos', latin: 'Vulpes vulpes', rarity: 3, wiki: 'Red_fox' },
+    { name: 'Rode eekhoorn', latin: 'Sciurus vulgaris', rarity: 3, wiki: 'Red_squirrel' },
+    { name: 'Sikahert', latin: 'Cervus nippon', rarity: 3, wiki: 'Sika_deer' },
+    { name: 'Damhert', latin: 'Dama dama', rarity: 3, wiki: 'Fallow_deer' },
+    { name: 'Wezel', latin: 'Mustela nivalis', rarity: 3, wiki: 'Least_weasel' },
+    { name: 'Berghaas', latin: 'Lepus timidus', rarity: 3, wiki: 'Mountain_hare' },
+    { name: 'Hermelijn', latin: 'Mustela erminea', rarity: 4, wiki: 'Stoat' },
+    { name: 'Bunzing', latin: 'Mustela putorius', rarity: 4, wiki: 'European_polecat' },
+    { name: 'Das', latin: 'Meles meles', rarity: 4, wiki: 'European_badger' },
+    { name: 'Otter', latin: 'Lutra lutra', rarity: 4, wiki: 'Eurasian_otter' },
+    { name: 'Rendier', latin: 'Rangifer tarandus', rarity: 5, wiki: 'Reindeer' },
+    { name: 'Boommarter', latin: 'Martes martes', rarity: 5, wiki: 'European_pine_marten' },
+    { name: 'Schotse wilde kat', latin: 'Felis silvestris', rarity: 5, wiki: 'Scottish_wildcat' },
   ]},
   { name: 'Roofvogels', icon: '🦅', animals: [
-    { name: 'Buizerd', latin: 'Buteo buteo', rarity: 1, file: 'Common buzzard in Romania.jpg' },
-    { name: 'Torenvalk', latin: 'Falco tinnunculus', rarity: 2, file: 'Falco tinnunculus qtl1.jpg' },
-    { name: 'Sperwer', latin: 'Accipiter nisus', rarity: 3, file: 'Accipiter nisus Meneer Zjeroen.jpg' },
-    { name: 'Bruine kiekendief', latin: 'Circus aeruginosus', rarity: 3, file: 'Circus aeruginosus 1 (Marek Szczepanek).jpg' },
-    { name: 'Visarend', latin: 'Pandion haliaetus', rarity: 4, file: 'Pandion haliaetus -Lake Cachuma, California, USA-8.jpg' },
-    { name: 'Slechtvalk', latin: 'Falco peregrinus', rarity: 4, file: 'Falco peregrinus good - Christopher Watson.jpg' },
-    { name: 'Smelleken', latin: 'Falco columbarius', rarity: 4, file: 'Falco columbarius -British Wildlife Centre, Surrey, England-8a.jpg' },
-    { name: 'Rode wouw', latin: 'Milvus milvus', rarity: 4, file: 'Red Kite over Cwmgwesyn.jpg' },
-    { name: 'Steenarend', latin: 'Aquila chrysaetos', rarity: 5, file: 'Golden Eagle in flight - 5.jpg' },
-    { name: 'Zeearend', latin: 'Haliaeetus albicilla', rarity: 5, file: 'White-tailed eagle in flight.jpg' },
-    { name: 'Velduil', latin: 'Asio flammeus', rarity: 5, file: 'Asio flammeus -Lewis, Scotland -flying-8.jpg' },
-    { name: 'Sneeuwuil', latin: 'Bubo scandiacus', rarity: 5, file: 'Snowy Owl - Schnee-Eule.jpg' },
+    { name: 'Buizerd', latin: 'Buteo buteo', rarity: 1, wiki: 'Common_buzzard' },
+    { name: 'Torenvalk', latin: 'Falco tinnunculus', rarity: 2, wiki: 'Common_kestrel' },
+    { name: 'Sperwer', latin: 'Accipiter nisus', rarity: 3, wiki: 'Eurasian_sparrowhawk' },
+    { name: 'Bruine kiekendief', latin: 'Circus aeruginosus', rarity: 3, wiki: 'Western_marsh_harrier' },
+    { name: 'Visarend', latin: 'Pandion haliaetus', rarity: 4, wiki: 'Osprey' },
+    { name: 'Slechtvalk', latin: 'Falco peregrinus', rarity: 4, wiki: 'Peregrine_falcon' },
+    { name: 'Smelleken', latin: 'Falco columbarius', rarity: 4, wiki: 'Merlin_(bird)' },
+    { name: 'Rode wouw', latin: 'Milvus milvus', rarity: 4, wiki: 'Red_kite' },
+    { name: 'Steenarend', latin: 'Aquila chrysaetos', rarity: 5, wiki: 'Golden_eagle' },
+    { name: 'Zeearend', latin: 'Haliaeetus albicilla', rarity: 5, wiki: 'White-tailed_eagle' },
+    { name: 'Velduil', latin: 'Asio flammeus', rarity: 5, wiki: 'Short-eared_owl' },
+    { name: 'Sneeuwuil', latin: 'Bubo scandiacus', rarity: 5, wiki: 'Snowy_owl' },
   ]},
   { name: 'Hoenders', icon: '🐔', animals: [
-    { name: 'Fazant', latin: 'Phasianus colchicus', rarity: 2, file: 'Phasianus colchicus 2 tom (Lukasz Lukasik).jpg' },
-    { name: 'Schots moerassneeuwhoen', latin: 'Lagopus lagopus scotica', rarity: 3, file: 'Red grouse close.JPG' },
-    { name: 'Korhoen', latin: 'Lyrurus tetrix', rarity: 4, file: 'Tetrao tetrix2.jpg' },
-    { name: 'Alpensneeuwhoen', latin: 'Lagopus muta', rarity: 4, file: 'Lagopus mutus 4 (Marek Szczepanek).jpg' },
-    { name: 'Auerhoen', latin: 'Tetrao urogallus', rarity: 5, file: 'Tetrao urogallus -Lauttasaari, Finland-8.jpg' },
+    { name: 'Fazant', latin: 'Phasianus colchicus', rarity: 2, wiki: 'Common_pheasant' },
+    { name: 'Schots moerassneeuwhoen', latin: 'Lagopus lagopus scotica', rarity: 3, wiki: 'Red_grouse' },
+    { name: 'Korhoen', latin: 'Lyrurus tetrix', rarity: 4, wiki: 'Black_grouse' },
+    { name: 'Alpensneeuwhoen', latin: 'Lagopus muta', rarity: 4, wiki: 'Rock_ptarmigan' },
+    { name: 'Auerhoen', latin: 'Tetrao urogallus', rarity: 5, wiki: 'Western_capercaillie' },
   ]},
   { name: 'Zang- & bosvogels', icon: '🐦', animals: [
-    { name: 'Roodborst', latin: 'Erithacus rubecula', rarity: 1, file: 'Erithacus rubecula with cocked head.jpg' },
-    { name: 'Houtduif', latin: 'Columba palumbus', rarity: 1, file: 'Columba palumbus -Norfolk, England-8.jpg' },
-    { name: 'Zwarte kraai', latin: 'Corvus corone', rarity: 1, file: 'Carrion Crow RWD3.jpg' },
-    { name: 'Spreeuw', latin: 'Sturnus vulgaris', rarity: 1, file: 'Sturnus vulgaris 1 (Marek Szczepanek).jpg' },
-    { name: 'Koolmees', latin: 'Parus major', rarity: 1, file: 'Parus major m.jpg' },
-    { name: 'Vink', latin: 'Fringilla coelebs', rarity: 1, file: 'Common chaffinch (Fringilla coelebs) male 2.jpg' },
-    { name: 'Merel', latin: 'Turdus merula', rarity: 1, file: 'Common Blackbird.jpg' },
-    { name: 'Mus', latin: 'Passer domesticus', rarity: 1, file: 'Passer domesticus male (15).jpg' },
-    { name: 'Zanglijster', latin: 'Turdus philomelos', rarity: 2, file: 'Singdrossel Turdus philomelos.jpg' },
-    { name: 'Vlaamse gaai', latin: 'Garrulus glandarius', rarity: 2, file: 'Garrulus glandarius 1 Luc Viatour.jpg' },
-    { name: 'Bonte specht', latin: 'Dendrocopos major', rarity: 2, file: 'Buntspecht Dendrocopos major.jpg' },
-    { name: 'Goudvink', latin: 'Pyrrhula pyrrhula', rarity: 3, file: 'Bullfinch male.jpg' },
-    { name: 'Raaf', latin: 'Corvus corax', rarity: 3, file: 'Corvus corax (Common Raven), Yosemite NP, CA, US - Diliff.jpg' },
-    { name: 'Frater', latin: 'Linaria flavirostris', rarity: 4, file: 'Twite (Carduelis flavirostris).jpg' },
-    { name: 'Schotse kruisbek', latin: 'Loxia scotica', rarity: 5, file: 'Loxia scotica.jpg' },
+    { name: 'Roodborst', latin: 'Erithacus rubecula', rarity: 1, wiki: 'European_robin' },
+    { name: 'Houtduif', latin: 'Columba palumbus', rarity: 1, wiki: 'Common_wood_pigeon' },
+    { name: 'Zwarte kraai', latin: 'Corvus corone', rarity: 1, wiki: 'Carrion_crow' },
+    { name: 'Spreeuw', latin: 'Sturnus vulgaris', rarity: 1, wiki: 'Common_starling' },
+    { name: 'Koolmees', latin: 'Parus major', rarity: 1, wiki: 'Great_tit' },
+    { name: 'Vink', latin: 'Fringilla coelebs', rarity: 1, wiki: 'Common_chaffinch' },
+    { name: 'Merel', latin: 'Turdus merula', rarity: 1, wiki: 'Common_blackbird' },
+    { name: 'Mus', latin: 'Passer domesticus', rarity: 1, wiki: 'House_sparrow' },
+    { name: 'Zanglijster', latin: 'Turdus philomelos', rarity: 2, wiki: 'Song_thrush' },
+    { name: 'Vlaamse gaai', latin: 'Garrulus glandarius', rarity: 2, wiki: 'Eurasian_jay' },
+    { name: 'Bonte specht', latin: 'Dendrocopos major', rarity: 2, wiki: 'Great_spotted_woodpecker' },
+    { name: 'Goudvink', latin: 'Pyrrhula pyrrhula', rarity: 3, wiki: 'Eurasian_bullfinch' },
+    { name: 'Raaf', latin: 'Corvus corax', rarity: 3, wiki: 'Common_raven' },
+    { name: 'Frater', latin: 'Linaria flavirostris', rarity: 4, wiki: 'Twite' },
+    { name: 'Schotse kruisbek', latin: 'Loxia scotica', rarity: 5, wiki: 'Scottish_crossbill' },
   ]},
   { name: 'Steltlopers & weidevogels', icon: '🦩', animals: [
-    { name: 'Kievit', latin: 'Vanellus vanellus', rarity: 2, file: 'Northern Lapwing (Vanellus vanellus).jpg' },
-    { name: 'Reiger', latin: 'Ardea cinerea', rarity: 2, file: 'Ardea cinerea - Pak Thale.jpg' },
-    { name: 'Wulp', latin: 'Numenius arquata', rarity: 3, file: 'Numenius arquata - 02.jpg' },
-    { name: 'Tureluur', latin: 'Tringa totanus', rarity: 3, file: 'Common Redshank (Tringa totanus).jpg' },
-    { name: 'Goudplevier', latin: 'Pluvialis apricaria', rarity: 3, file: 'Pluvialis apricaria 1 (Marek Szczepanek).jpg' },
-    { name: 'Watersnip', latin: 'Gallinago gallinago', rarity: 3, file: 'Common snipe portland.jpg' },
-    { name: 'Houtsnip', latin: 'Scolopax rusticola', rarity: 4, file: 'Scolopax rusticola 1 (Marek Szczepanek).jpg' },
-    { name: 'Grote zilverreiger', latin: 'Ardea alba', rarity: 4, file: 'Great Egret 02.jpg' },
-    { name: 'Ooievaar', latin: 'Ciconia ciconia', rarity: 5, file: 'Ciconia ciconia (Marek Szczepanek).jpg' },
+    { name: 'Kievit', latin: 'Vanellus vanellus', rarity: 2, wiki: 'Northern_lapwing' },
+    { name: 'Reiger', latin: 'Ardea cinerea', rarity: 2, wiki: 'Grey_heron' },
+    { name: 'Wulp', latin: 'Numenius arquata', rarity: 3, wiki: 'Eurasian_curlew' },
+    { name: 'Tureluur', latin: 'Tringa totanus', rarity: 3, wiki: 'Common_redshank' },
+    { name: 'Goudplevier', latin: 'Pluvialis apricaria', rarity: 3, wiki: 'European_golden_plover' },
+    { name: 'Watersnip', latin: 'Gallinago gallinago', rarity: 3, wiki: 'Common_snipe' },
+    { name: 'Houtsnip', latin: 'Scolopax rusticola', rarity: 4, wiki: 'Eurasian_woodcock' },
+    { name: 'Grote zilverreiger', latin: 'Ardea alba', rarity: 4, wiki: 'Great_egret' },
+    { name: 'Ooievaar', latin: 'Ciconia ciconia', rarity: 5, wiki: 'White_stork' },
   ]},
   { name: 'Zee & water', icon: '🦭', animals: [
-    { name: 'Zilvermeeuw', latin: 'Larus argentatus', rarity: 1, file: 'Larus argentatus01.jpg' },
-    { name: 'Aalscholver', latin: 'Phalacrocorax carbo', rarity: 2, file: 'Phalacrocorax carbo Vardo.jpg' },
-    { name: 'Grijze zeehond', latin: 'Halichoerus grypus', rarity: 2, file: 'Halichoerus-grypus-Helgoland.jpg' },
-    { name: 'Gewone zeehond', latin: 'Phoca vitulina', rarity: 2, file: 'Phoca vitulina Schiermonnikoog.JPG' },
-    { name: 'Jan-van-gent', latin: 'Morus bassanus', rarity: 3, file: 'Northern Gannet RWD3.jpg' },
-    { name: 'Papegaaiduiker', latin: 'Fratercula arctica', rarity: 3, file: 'Puffin (Fratercula arctica).jpg' },
-    { name: 'Zeekoet', latin: 'Uria aalge', rarity: 3, file: 'Common-Murre Uria-aalge.jpg' },
-    { name: 'Alk', latin: 'Alca torda', rarity: 3, file: 'Razorbill (Alca torda).jpg' },
-    { name: 'IJsvogel', latin: 'Alcedo atthis', rarity: 4, file: 'Common Kingfisher Alcedo atthis.jpg' },
-    { name: 'Bruinvis', latin: 'Phocoena phocoena', rarity: 4, file: 'Phocoena phocoena 2.jpg' },
-    { name: 'Tuimelaar', latin: 'Tursiops truncatus', rarity: 4, file: 'Tursiops truncatus 01.jpg' },
-    { name: 'Witzijdolfijn', latin: 'Lagenorhynchus acutus', rarity: 5, file: 'Atlantic white-sided dolphins.jpg' },
-    { name: 'Dwergvinvis', latin: 'Balaenoptera acutorostrata', rarity: 5, file: 'Minke Whale (NOAA).jpg' },
-    { name: 'Orka', latin: 'Orcinus orca', rarity: 5, file: 'Killerwhales jumping.jpg' },
-    { name: 'Bultrug', latin: 'Megaptera novaeangliae', rarity: 5, file: 'Humpback stellwagen edit.jpg' },
+    { name: 'Zilvermeeuw', latin: 'Larus argentatus', rarity: 1, wiki: 'European_herring_gull' },
+    { name: 'Aalscholver', latin: 'Phalacrocorax carbo', rarity: 2, wiki: 'Great_cormorant' },
+    { name: 'Grijze zeehond', latin: 'Halichoerus grypus', rarity: 2, wiki: 'Grey_seal' },
+    { name: 'Gewone zeehond', latin: 'Phoca vitulina', rarity: 2, wiki: 'Harbor_seal' },
+    { name: 'Jan-van-gent', latin: 'Morus bassanus', rarity: 3, wiki: 'Northern_gannet' },
+    { name: 'Papegaaiduiker', latin: 'Fratercula arctica', rarity: 3, wiki: 'Atlantic_puffin' },
+    { name: 'Zeekoet', latin: 'Uria aalge', rarity: 3, wiki: 'Common_murre' },
+    { name: 'Alk', latin: 'Alca torda', rarity: 3, wiki: 'Razorbill' },
+    { name: 'IJsvogel', latin: 'Alcedo atthis', rarity: 4, wiki: 'Common_kingfisher' },
+    { name: 'Bruinvis', latin: 'Phocoena phocoena', rarity: 4, wiki: 'Harbour_porpoise' },
+    { name: 'Tuimelaar', latin: 'Tursiops truncatus', rarity: 4, wiki: 'Common_bottlenose_dolphin' },
+    { name: 'Witzijdolfijn', latin: 'Lagenorhynchus acutus', rarity: 5, wiki: 'Atlantic_white-sided_dolphin' },
+    { name: 'Dwergvinvis', latin: 'Balaenoptera acutorostrata', rarity: 5, wiki: 'Common_minke_whale' },
+    { name: 'Orka', latin: 'Orcinus orca', rarity: 5, wiki: 'Orca' },
+    { name: 'Bultrug', latin: 'Megaptera novaeangliae', rarity: 5, wiki: 'Humpback_whale' },
   ]},
   { name: 'Klein & kruipend', icon: '🦔', animals: [
-    { name: 'Bruine kikker', latin: 'Rana temporaria', rarity: 2, file: 'Rana temporaria 01 by-dpc.jpg' },
-    { name: 'Pad', latin: 'Bufo bufo', rarity: 3, file: 'Bufo bufo 01-cropped.jpg' },
-    { name: 'Egel', latin: 'Erinaceus europaeus', rarity: 3, file: 'Igel.JPG' },
-    { name: 'Levendbarende hagedis', latin: 'Zootoca vivipara', rarity: 3, file: 'Lacerta vivipara2.jpg' },
-    { name: 'Hazelworm', latin: 'Anguis fragilis', rarity: 4, file: 'Anguis fragilis -Norway-8.jpg' },
-    { name: 'Adder', latin: 'Vipera berus', rarity: 4, file: 'Vipera berus (Marek Szczepanek).jpg' },
+    { name: 'Bruine kikker', latin: 'Rana temporaria', rarity: 2, wiki: 'Common_frog' },
+    { name: 'Pad', latin: 'Bufo bufo', rarity: 3, wiki: 'Common_toad' },
+    { name: 'Egel', latin: 'Erinaceus europaeus', rarity: 3, wiki: 'European_hedgehog' },
+    { name: 'Levendbarende hagedis', latin: 'Zootoca vivipara', rarity: 3, wiki: 'Viviparous_lizard' },
+    { name: 'Hazelworm', latin: 'Anguis fragilis', rarity: 4, wiki: 'Slowworm' },
+    { name: 'Adder', latin: 'Vipera berus', rarity: 4, wiki: 'Vipera_berus' },
   ]}
 ];
 const RARITY_LABELS = ['', 'Zeer algemeen', 'Algemeen', 'Soms', 'Zeldzaam', 'Zeer zeldzaam'];
 const STORAGE_KEY = 'highlands-spotted-v2';
+const IMAGE_CACHE_KEY = 'highlands-images-v3';
 let spotted = {};
+let imageCache = {};
 let db = null;
 let searchTerm = '';
+
 function openDB() {
   return new Promise((resolve) => {
     try {
@@ -421,61 +294,51 @@ function openDB() {
 }
 async function dbGet(key) {
   if (!db) return null;
-  return new Promise((resolve) => {
+  return new Promise((r) => {
     try {
       const tx = db.transaction('state', 'readonly');
       const req = tx.objectStore('state').get(key);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => resolve(null);
-    } catch(e) { resolve(null); }
+      req.onsuccess = () => r(req.result);
+      req.onerror = () => r(null);
+    } catch(e) { r(null); }
   });
 }
 async function dbSet(key, value) {
   if (!db) return;
-  return new Promise((resolve) => {
+  return new Promise((r) => {
     try {
       const tx = db.transaction('state', 'readwrite');
       tx.objectStore('state').put(value, key);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => resolve();
-    } catch(e) { resolve(); }
+      tx.oncomplete = () => r();
+      tx.onerror = () => r();
+    } catch(e) { r(); }
   });
 }
 function setCookie(name, value) {
   try {
-    const d = new Date();
-    d.setFullYear(d.getFullYear() + 5);
+    const d = new Date(); d.setFullYear(d.getFullYear() + 5);
     document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
   } catch(e) {}
 }
 function getCookie(name) {
-  try {
-    const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return m ? decodeURIComponent(m[2]) : null;
-  } catch(e) { return null; }
+  try { const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : null; } catch(e) { return null; }
 }
 async function loadState() {
   const sources = [];
-  try {
-    const dbVal = await dbGet(STORAGE_KEY);
-    if (dbVal) sources.push({ src: 'idb', val: dbVal });
-  } catch(e) {}
-  try {
-    const ls = localStorage.getItem(STORAGE_KEY);
-    if (ls) sources.push({ src: 'ls', val: ls });
-  } catch(e) {}
-  const ck = getCookie(STORAGE_KEY);
-  if (ck) sources.push({ src: 'ck', val: ck });
-  let best = null;
-  let bestCount = -1;
+  try { const v = await dbGet(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
+  try { const v = localStorage.getItem(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
+  const ck = getCookie(STORAGE_KEY); if (ck) sources.push(ck);
+  let best = null, bestCount = -1;
   for (const s of sources) {
-    try {
-      const obj = JSON.parse(s.val);
-      const count = Object.keys(obj).length;
-      if (count > bestCount) { bestCount = count; best = obj; }
-    } catch(e) {}
+    try { const obj = JSON.parse(s); const c = Object.keys(obj).length; if (c > bestCount) { bestCount = c; best = obj; } } catch(e) {}
   }
   spotted = best || {};
+  
+  // Load image cache
+  try {
+    const cached = await dbGet(IMAGE_CACHE_KEY) || localStorage.getItem(IMAGE_CACHE_KEY);
+    if (cached) imageCache = JSON.parse(cached);
+  } catch(e) { imageCache = {}; }
 }
 async function saveState() {
   const json = JSON.stringify(spotted);
@@ -483,12 +346,37 @@ async function saveState() {
   setCookie(STORAGE_KEY, json);
   await dbSet(STORAGE_KEY, json);
 }
-function makeKey(catName, animalName) { return catName + '::' + animalName; }
+async function saveImageCache() {
+  const json = JSON.stringify(imageCache);
+  try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {}
+  await dbSet(IMAGE_CACHE_KEY, json);
+}
+
+// Wikipedia REST API: page/summary geeft thumbnail + originalimage
+async function fetchImageFromWiki(wikiPage) {
+  if (imageCache[wikiPage]) return imageCache[wikiPage];
+  try {
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiPage)}`;
+    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!r.ok) throw new Error('not ok');
+    const j = await r.json();
+    const result = {
+      thumb: j.thumbnail?.source || null,
+      full: j.originalimage?.source || j.thumbnail?.source || null
+    };
+    imageCache[wikiPage] = result;
+    return result;
+  } catch(e) {
+    return { thumb: null, full: null };
+  }
+}
+
+function makeKey(c, n) { return c + '::' + n; }
+
 function render() {
   const container = document.getElementById('categories');
   container.innerHTML = '';
-  let totalAnimals = 0;
-  let totalSpotted = 0;
+  let totalAnimals = 0, totalSpotted = 0;
   data.forEach(cat => {
     const sorted = [...cat.animals].sort((a,b) => a.rarity - b.rarity);
     totalAnimals += sorted.length;
@@ -496,38 +384,20 @@ function render() {
     totalSpotted += catSpotted;
     const catEl = document.createElement('section');
     catEl.className = 'category';
-    catEl.dataset.catName = cat.name;
-    catEl.innerHTML = `
-      <div class="category-header">
-        <span class="category-icon">${cat.icon}</span>
-        <span class="category-name">${cat.name}</span>
-        <span class="category-count">${catSpotted} / ${sorted.length}</span>
-      </div>
-      <div class="animal-list"></div>
-    `;
+    catEl.innerHTML = `<div class="category-header"><span class="category-icon">${cat.icon}</span><span class="category-name">${cat.name}</span><span class="category-count">${catSpotted} / ${sorted.length}</span></div><div class="animal-list"></div>`;
     const list = catEl.querySelector('.animal-list');
     sorted.forEach(animal => {
       const key = makeKey(cat.name, animal.name);
       const isSpotted = !!spotted[key];
-      const dots = Array.from({length: 5}, (_, i) =>
-        `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`
-      ).join('');
+      const dots = Array.from({length: 5}, (_, i) => `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`).join('');
+      const cached = imageCache[animal.wiki];
+      const imgHtml = cached && cached.thumb
+        ? `<img class="animal-img" src="${cached.thumb}" alt="${animal.name}" loading="lazy" referrerpolicy="no-referrer">`
+        : `<div class="img-loading" data-wiki="${animal.wiki}"></div>`;
       const el = document.createElement('div');
       el.className = 'animal' + (isSpotted ? ' spotted' : '');
       el.dataset.searchText = (animal.name + ' ' + animal.latin).toLowerCase();
-      el.innerHTML = `
-        <div class="animal-img-wrap">
-          <img class="animal-img" src="${fp(animal.file, 200)}" alt="${animal.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.classList.add('fallback'); this.src='${SVG_FALLBACK}'">
-        </div>
-        <div class="animal-info">
-          <div class="animal-name">${animal.name}</div>
-          <div class="animal-latin">${animal.latin}</div>
-          <div class="rarity">${dots}</div>
-        </div>
-        <div class="check">
-          <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg>
-        </div>
-      `;
+      el.innerHTML = `<div class="animal-img-wrap">${imgHtml}</div><div class="animal-info"><div class="animal-name">${animal.name}</div><div class="animal-latin">${animal.latin}</div><div class="rarity">${dots}</div></div><div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>`;
       const toggleSpot = async (e) => {
         e.stopPropagation();
         if (spotted[key]) delete spotted[key];
@@ -538,10 +408,7 @@ function render() {
       };
       el.querySelector('.animal-info').addEventListener('click', toggleSpot);
       el.querySelector('.check').addEventListener('click', toggleSpot);
-      el.querySelector('.animal-img-wrap').addEventListener('click', (e) => {
-        e.stopPropagation();
-        openLightbox(animal);
-      });
+      el.querySelector('.animal-img-wrap').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(animal); });
       list.appendChild(el);
     });
     container.appendChild(catEl);
@@ -550,6 +417,46 @@ function render() {
   document.getElementById('totalAnimals').textContent = totalAnimals;
   applyFilter();
 }
+
+async function loadAllImages() {
+  const allAnimals = data.flatMap(c => c.animals);
+  const todo = allAnimals.filter(a => !imageCache[a.wiki]);
+  if (todo.length === 0) return;
+  const banner = document.getElementById('loadingBanner');
+  banner.classList.add('show');
+  let done = 0;
+  banner.textContent = `📷 Foto's laden... 0/${todo.length}`;
+  // Batches van 5 om Wikipedia niet te overbelasten
+  for (let i = 0; i < todo.length; i += 5) {
+    const batch = todo.slice(i, i + 5);
+    await Promise.all(batch.map(async a => {
+      await fetchImageFromWiki(a.wiki);
+      done++;
+      banner.textContent = `📷 Foto's laden... ${done}/${todo.length}`;
+      // Update placeholders live
+      document.querySelectorAll(`.img-loading[data-wiki="${a.wiki}"]`).forEach(ph => {
+        const cached = imageCache[a.wiki];
+        if (cached && cached.thumb) {
+          const img = document.createElement('img');
+          img.className = 'animal-img';
+          img.src = cached.thumb;
+          img.alt = a.name;
+          img.loading = 'lazy';
+          img.referrerPolicy = 'no-referrer';
+          ph.replaceWith(img);
+        } else {
+          ph.classList.remove('img-loading');
+          ph.classList.add('img-placeholder');
+          ph.textContent = '?';
+        }
+      });
+    }));
+    await saveImageCache();
+  }
+  banner.textContent = `✓ Alle foto's geladen`;
+  setTimeout(() => banner.classList.remove('show'), 2000);
+}
+
 function applyFilter() {
   const term = searchTerm.toLowerCase().trim();
   let totalVisible = 0;
@@ -565,24 +472,23 @@ function applyFilter() {
   });
   document.getElementById('noResults').classList.toggle('show', totalVisible === 0 && term.length > 0);
 }
-function openLightbox(animal) {
+
+async function openLightbox(animal) {
   const img = document.getElementById('lightboxImg');
-  img.classList.remove('fallback');
-  img.src = fp(animal.file, 800);
-  img.onerror = function() {
-    this.classList.add('fallback');
-    this.src = SVG_FALLBACK;
-  };
   document.getElementById('lightboxTitle').textContent = animal.name;
   document.getElementById('lightboxLatin').textContent = animal.latin;
-  const dots = Array.from({length: 5}, (_, i) =>
-    `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`
-  ).join('');
+  const dots = Array.from({length: 5}, (_, i) => `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`).join('');
   document.getElementById('lightboxRarity').innerHTML = dots;
   document.getElementById('lightboxRarityLabel').textContent = RARITY_LABELS[animal.rarity];
   document.getElementById('lightbox').classList.add('show');
   document.body.style.overflow = 'hidden';
+  
+  let cached = imageCache[animal.wiki];
+  if (cached && cached.thumb) img.src = cached.thumb;
+  if (!cached || !cached.full) cached = await fetchImageFromWiki(animal.wiki);
+  if (cached && cached.full) img.src = cached.full;
 }
+
 function closeLightbox(e) {
   if (e && e.target.closest('.lightbox-content') && !e.target.classList.contains('lightbox-close')) return;
   document.getElementById('lightbox').classList.remove('show');
@@ -597,40 +503,27 @@ async function resetAll() {
   }
 }
 function openBackup() {
-  const json = JSON.stringify(spotted);
-  const code = btoa(json);
-  document.getElementById('backupCode').value = code;
+  document.getElementById('backupCode').value = btoa(JSON.stringify(spotted));
   document.getElementById('backupModal').classList.add('show');
 }
-function closeBackup() {
-  document.getElementById('backupModal').classList.remove('show');
-}
+function closeBackup() { document.getElementById('backupModal').classList.remove('show'); }
 async function copyBackup() {
-  const ta = document.getElementById('backupCode');
-  ta.select();
-  try {
-    await navigator.clipboard.writeText(ta.value);
-    showToast('Gekopieerd! Plak in een notitie als backup');
-  } catch(e) {
-    document.execCommand('copy');
-    showToast('Gekopieerd');
-  }
+  const ta = document.getElementById('backupCode'); ta.select();
+  try { await navigator.clipboard.writeText(ta.value); showToast('Gekopieerd!'); }
+  catch(e) { document.execCommand('copy'); showToast('Gekopieerd'); }
 }
 async function restoreBackup() {
   const code = document.getElementById('backupCode').value.trim();
   if (!code) { showToast('Plak eerst een code'); return; }
   try {
-    const json = atob(code);
-    const obj = JSON.parse(json);
+    const obj = JSON.parse(atob(code));
     if (typeof obj !== 'object') throw new Error();
     spotted = obj;
     await saveState();
     render();
     closeBackup();
     showToast(`Hersteld: ${Object.keys(obj).length} vinkjes`);
-  } catch(e) {
-    showToast('Ongeldige code');
-  }
+  } catch(e) { showToast('Ongeldige code'); }
 }
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -653,6 +546,7 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
   await openDB();
   await loadState();
   render();
+  loadAllImages();
 })();
 </script>
 </body>
