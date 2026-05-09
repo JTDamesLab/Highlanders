@@ -53,17 +53,31 @@
   .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; opacity: 0.5; pointer-events: none; }
   .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; background: rgba(232, 227, 216, 0.15); border: none; color: var(--bone); font-size: 14px; line-height: 1; display: none; cursor: pointer; }
   .search-clear.show { display: flex; align-items: center; justify-content: center; }
-  .sort-toggle { display: flex; gap: 6px; align-items: center; justify-content: center; }
+  .controls-row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .sort-toggle { display: flex; gap: 6px; align-items: center; flex: 1; min-width: 0; }
   .sort-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); opacity: 0.5; margin-right: 4px; }
-  .sort-btn { padding: 6px 12px; background: transparent; border: 1px solid rgba(232, 227, 216, 0.15); color: var(--mist); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: all 0.2s; }
+  .sort-btn { padding: 6px 10px; background: transparent; border: 1px solid rgba(232, 227, 216, 0.15); color: var(--mist); font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(184, 147, 90, 0.08); }
-  .category { margin-bottom: 36px; }
+  .expand-all-btn { padding: 6px 10px; background: transparent; border: 1px solid rgba(232, 227, 216, 0.15); color: var(--mist); font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; cursor: pointer; white-space: nowrap; }
+  .expand-all-btn:active { background: rgba(232, 227, 216, 0.05); }
+  .category { margin-bottom: 14px; border: 1px solid rgba(232, 227, 216, 0.06); border-radius: 4px; overflow: hidden; background: rgba(232, 227, 216, 0.015); transition: border-color 0.2s ease; }
   .category.hidden { display: none; }
-  .category-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(232, 227, 216, 0.08); }
-  .category-icon { font-size: 18px; opacity: 0.8; }
-  .category-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--bone); }
-  .category-count { margin-left: auto; font-size: 10px; letter-spacing: 0.2em; color: var(--mist); opacity: 0.5; text-transform: uppercase; }
-  .animal-list { display: flex; flex-direction: column; gap: 10px; }
+  .category.expanded { border-color: rgba(184, 147, 90, 0.18); }
+  .category-header { display: flex; align-items: center; gap: 12px; padding: 14px 14px; cursor: pointer; user-select: none; transition: background 0.2s ease; -webkit-user-select: none; }
+  .category-header:active { background: rgba(232, 227, 216, 0.04); }
+  .category.expanded .category-header { border-bottom: 1px solid rgba(232, 227, 216, 0.06); }
+  .category-icon { font-size: 18px; opacity: 0.85; flex-shrink: 0; }
+  .category-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--bone); flex: 1; line-height: 1.1; }
+  .category-progress { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .category-progress-mini { width: 50px; height: 3px; background: rgba(232, 227, 216, 0.1); border-radius: 2px; overflow: hidden; }
+  .category-progress-mini-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; }
+  .category-count { font-size: 10px; letter-spacing: 0.15em; color: var(--mist); opacity: 0.7; text-transform: uppercase; font-family: 'Inter', sans-serif; min-width: 38px; text-align: right; }
+  .category.fully-spotted .category-count { color: var(--gold); opacity: 1; }
+  .category-chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--mist); opacity: 0.5; transition: transform 0.3s ease; }
+  .category.expanded .category-chevron { transform: rotate(180deg); color: var(--gold); opacity: 0.9; }
+  .category-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .category.expanded .category-body { max-height: 6000px; transition: max-height 0.6s ease; }
+  .animal-list { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
   .animal { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(232, 227, 216, 0.03); border: 1px solid rgba(232, 227, 216, 0.08); border-radius: 4px; transition: all 0.3s ease; position: relative; overflow: hidden; }
   .animal.hidden { display: none; }
   .animal::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: top; }
@@ -130,7 +144,6 @@
   .modal-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1300; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
   .toast.show { opacity: 1; }
-  /* Level-up celebration */
   .levelup-overlay { position: fixed; inset: 0; z-index: 1500; display: none; align-items: center; justify-content: center; pointer-events: none; }
   .levelup-overlay.show { display: flex; pointer-events: auto; }
   .levelup-bg { position: absolute; inset: 0; background: rgba(10, 13, 10, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: fadeIn 0.4s ease; }
@@ -146,7 +159,6 @@
   .levelup-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--mist); opacity: 0.85; line-height: 1.4; }
   .levelup-close { margin-top: 22px; padding: 10px 24px; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
   .levelup-close:active { background: rgba(184, 147, 90, 0.15); }
-  /* Confetti particles */
   .confetti { position: absolute; width: 8px; height: 8px; opacity: 0; pointer-events: none; }
   .confetti.go { animation: confettiFall 2.5s cubic-bezier(0.5, 0, 0.5, 1) forwards; }
   @keyframes confettiFall { 0% { opacity: 0; transform: translate(0, -20vh) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx, 0), 110vh) rotate(720deg); } }
@@ -170,7 +182,7 @@
   .popup-when { font-size: 11px; color: var(--mist); opacity: 0.8; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px; }
   .popup-img { width: 60px; height: 60px; object-fit: cover; border-radius: 3px; margin-top: 6px; }
   .leaflet-container a.leaflet-popup-close-button { color: var(--bone); }
-  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } .crest { width: 150px; } .levelup-roman { font-size: 48px; } .levelup-name { font-size: 22px; } }
+  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } .crest { width: 150px; } .levelup-roman { font-size: 48px; } .levelup-name { font-size: 22px; } .category-progress-mini { width: 36px; } .category-name { font-size: 18px; } }
 </style>
 </head>
 <body>
@@ -208,10 +220,12 @@
       <input type="text" class="search-input" id="searchInput" placeholder="Zoek dier..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
     </div>
-    <div class="sort-toggle">
-      <span class="sort-label">Sorteer:</span>
-      <button class="sort-btn active" id="sortCommon" onclick="setSort('common')">Algemeen → zeldzaam</button>
-      <button class="sort-btn" id="sortRare" onclick="setSort('rare')">Zeldzaam → algemeen</button>
+    <div class="controls-row">
+      <div class="sort-toggle">
+        <button class="sort-btn active" id="sortCommon" onclick="setSort('common')">Algemeen→zeldzaam</button>
+        <button class="sort-btn" id="sortRare" onclick="setSort('rare')">Zeldzaam→algemeen</button>
+      </div>
+      <button class="expand-all-btn" id="expandAllBtn" onclick="toggleExpandAll()">Alles uit</button>
     </div>
   </div>
   <div id="categories"></div>
@@ -475,7 +489,6 @@ const data = [
 
 const RARITY_LABELS = ['', 'Zeer algemeen', 'Algemeen', 'Soms', 'Zeldzaam', 'Zeer zeldzaam'];
 
-// === LEVEL SYSTEEM ===
 const LEVELS = [
   { roman: 'I',    nl: 'Wandelaar van de Heide',    en: 'Heath Wanderer',    trophy: '🥾', tagline: 'De eerste stappen op het pad. Het avontuur begint.' },
   { roman: 'II',   nl: 'Veldwachter',                en: 'Field Watcher',     trophy: '👁️', tagline: 'Tien dieren in je veldgids — een waardige stap.' },
@@ -490,30 +503,24 @@ const LEVELS = [
 ];
 
 function getLevelForCount(count) {
-  // Level 1 = 0-9 dieren, level 2 = 10-19, ... level 10 = 90+
   const idx = Math.min(Math.floor(count / 10), LEVELS.length - 1);
   return { index: idx, level: LEVELS[idx] };
 }
-
 function updateLevelBadge(spottedCount) {
   const { index, level } = getLevelForCount(spottedCount);
   document.getElementById('levelRoman').textContent = level.roman;
   document.getElementById('levelNameNl').textContent = level.nl;
   document.getElementById('levelNameEn').textContent = level.en;
-  
   if (index >= LEVELS.length - 1) {
-    // Max level bereikt
     document.getElementById('levelProgressBar').style.width = '100%';
     document.getElementById('levelProgressText').textContent = '✦ Hoogste rang behaald ✦';
   } else {
     const inLevel = spottedCount - (index * 10);
     const pct = (inLevel / 10) * 100;
     document.getElementById('levelProgressBar').style.width = pct + '%';
-    const remaining = 10 - inLevel;
     document.getElementById('levelProgressText').textContent = inLevel + ' / 10 dieren naar volgende rang';
   }
 }
-
 function showLevelUp(newIndex) {
   const level = LEVELS[newIndex];
   document.getElementById('levelupTrophy').textContent = level.trophy;
@@ -526,7 +533,6 @@ function showLevelUp(newIndex) {
   if (navigator.vibrate) navigator.vibrate([30, 60, 30, 60, 80]);
   spawnConfetti();
 }
-
 function spawnConfetti() {
   const overlay = document.getElementById('levelupOverlay');
   const colors = ['#b8935a', '#d4ad75', '#6b4e6f', '#e8e3d8', '#8b4a32'];
@@ -546,7 +552,6 @@ function spawnConfetti() {
     setTimeout(() => c.remove(), 3500);
   }
 }
-
 function closeLevelUp() {
   document.getElementById('levelupOverlay').classList.remove('show');
   document.body.style.overflow = '';
@@ -557,6 +562,7 @@ const PINS_KEY = 'highlands-pins-v1';
 const IMAGE_CACHE_KEY = 'highlands-images-v4';
 const SORT_KEY = 'highlands-sort';
 const LEVEL_KEY = 'highlands-last-level';
+const EXPANDED_KEY = 'highlands-expanded-cats';
 const HIGHLANDS_CENTER = [57.0, -4.5];
 const HIGHLANDS_ZOOM = 8;
 
@@ -570,6 +576,7 @@ let map = null;
 let currentPinAnimal = null;
 let pinningMode = false;
 let lastLevelIndex = 0;
+let expandedCategories = new Set(); // Welke categorieën zijn uitgeklapt
 
 function openDB() { return new Promise((resolve) => { try { const req = indexedDB.open('highlands-spotter', 1); req.onupgradeneeded = (e) => { const d = e.target.result; if (!d.objectStoreNames.contains('state')) d.createObjectStore('state'); }; req.onsuccess = (e) => { db = e.target.result; resolve(db); }; req.onerror = () => resolve(null); } catch(e) { resolve(null); } }); }
 async function dbGet(key) { if (!db) return null; return new Promise((r) => { try { const tx = db.transaction('state', 'readonly'); const req = tx.objectStore('state').get(key); req.onsuccess = () => r(req.result); req.onerror = () => r(null); } catch(e) { r(null); } }); }
@@ -599,18 +606,25 @@ async function loadState() {
   }
   try { const s = localStorage.getItem(SORT_KEY); if (s === 'rare' || s === 'common') sortMode = s; } catch(e) {}
   
-  // Load level state
   try { const stored = localStorage.getItem(LEVEL_KEY); if (stored !== null) lastLevelIndex = parseInt(stored, 10) || 0; } catch(e) {}
-  // Initialize lastLevelIndex op huidige level (zonder level-up popup voor bestaande voortgang)
   const currentLevelIdx = getLevelForCount(Object.keys(spotted).length).index;
   if (lastLevelIndex < currentLevelIdx) lastLevelIndex = currentLevelIdx;
+  
+  // Expanded categorieën — standaard alles dicht
+  try {
+    const stored = localStorage.getItem(EXPANDED_KEY);
+    if (stored) {
+      const arr = JSON.parse(stored);
+      if (Array.isArray(arr)) expandedCategories = new Set(arr);
+    }
+  } catch(e) {}
 }
 async function saveState() { const json = JSON.stringify(spotted); try { localStorage.setItem(STORAGE_KEY, json); } catch(e) {} setCookie(STORAGE_KEY, json); await dbSet(STORAGE_KEY, json); }
 async function savePins() { const json = JSON.stringify(pins); try { localStorage.setItem(PINS_KEY, json); } catch(e) {} await dbSet(PINS_KEY, json); }
 async function saveImageCache() { const json = JSON.stringify(imageCache); try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {} await dbSet(IMAGE_CACHE_KEY, json); }
 function saveLastLevel() { try { localStorage.setItem(LEVEL_KEY, String(lastLevelIndex)); } catch(e) {} }
+function saveExpanded() { try { localStorage.setItem(EXPANDED_KEY, JSON.stringify(Array.from(expandedCategories))); } catch(e) {} }
 
-// Check voor level-up na elke verandering in spotted-count
 function checkForLevelUp() {
   const count = Object.keys(spotted).length;
   const newLevelIdx = getLevelForCount(count).index;
@@ -648,6 +662,38 @@ function findAnimalByKey(key) {
 }
 function totalPinsCount() { return Object.values(pins).reduce((a, arr) => a + (Array.isArray(arr) ? arr.length : 0), 0); }
 
+function toggleCategory(catName) {
+  if (expandedCategories.has(catName)) expandedCategories.delete(catName);
+  else expandedCategories.add(catName);
+  saveExpanded();
+  // Update alleen DOM, geen volledige re-render
+  const catEl = document.querySelector('.category[data-name="' + CSS.escape(catName) + '"]');
+  if (catEl) catEl.classList.toggle('expanded', expandedCategories.has(catName));
+  updateExpandAllButton();
+}
+
+function toggleExpandAll() {
+  // Tel alleen zichtbare (niet-verborgen door zoekterm) categorieën
+  const allCatNames = data.map(c => c.name);
+  const allOpen = allCatNames.every(n => expandedCategories.has(n));
+  if (allOpen) {
+    expandedCategories.clear();
+  } else {
+    allCatNames.forEach(n => expandedCategories.add(n));
+  }
+  saveExpanded();
+  document.querySelectorAll('.category').forEach(catEl => {
+    const name = catEl.dataset.name;
+    catEl.classList.toggle('expanded', expandedCategories.has(name));
+  });
+  updateExpandAllButton();
+}
+
+function updateExpandAllButton() {
+  const allOpen = data.every(c => expandedCategories.has(c.name));
+  document.getElementById('expandAllBtn').textContent = allOpen ? 'Alles in' : 'Alles uit';
+}
+
 function render() {
   const container = document.getElementById('categories');
   container.innerHTML = '';
@@ -657,9 +703,27 @@ function render() {
     totalAnimals += sorted.length;
     const catSpotted = sorted.filter(a => spotted[makeKey(cat.name, a.name)]).length;
     totalSpotted += catSpotted;
+    const catPct = sorted.length > 0 ? (catSpotted / sorted.length) * 100 : 0;
+    const isExpanded = expandedCategories.has(cat.name);
+    const isFull = catSpotted === sorted.length && sorted.length > 0;
     const catEl = document.createElement('section');
-    catEl.className = 'category';
-    catEl.innerHTML = '<div class="category-header"><span class="category-icon">' + cat.icon + '</span><span class="category-name">' + cat.name + '</span><span class="category-count">' + catSpotted + ' / ' + sorted.length + '</span></div><div class="animal-list"></div>';
+    catEl.className = 'category' + (isExpanded ? ' expanded' : '') + (isFull ? ' fully-spotted' : '');
+    catEl.dataset.name = cat.name;
+    catEl.innerHTML =
+      '<div class="category-header">' +
+        '<span class="category-icon">' + cat.icon + '</span>' +
+        '<span class="category-name">' + cat.name + '</span>' +
+        '<div class="category-progress">' +
+          '<div class="category-progress-mini"><div class="category-progress-mini-fill" style="width:' + catPct + '%"></div></div>' +
+          '<span class="category-count">' + catSpotted + ' / ' + sorted.length + '</span>' +
+        '</div>' +
+        '<svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
+      '</div>' +
+      '<div class="category-body"><div class="animal-list"></div></div>';
+    
+    const header = catEl.querySelector('.category-header');
+    header.addEventListener('click', () => toggleCategory(cat.name));
+    
     const list = catEl.querySelector('.animal-list');
     sorted.forEach(animal => {
       const key = makeKey(cat.name, animal.name);
@@ -709,6 +773,7 @@ function render() {
   document.getElementById('totalAnimals').textContent = totalAnimals;
   document.getElementById('totalPins').textContent = totalPinsCount();
   updateLevelBadge(totalSpotted);
+  updateExpandAllButton();
   applyFilter();
 }
 
@@ -784,12 +849,24 @@ function applyFilter() {
   let totalVisible = 0;
   document.querySelectorAll('.category').forEach(cat => {
     let catVisible = 0;
-    cat.querySelectorAll('.animal').forEach(an => { const match = !term || an.dataset.searchText.includes(term); an.classList.toggle('hidden', !match); if (match) catVisible++; });
+    cat.querySelectorAll('.animal').forEach(an => {
+      const match = !term || an.dataset.searchText.includes(term);
+      an.classList.toggle('hidden', !match);
+      if (match) catVisible++;
+    });
     cat.classList.toggle('hidden', catVisible === 0);
     totalVisible += catVisible;
+    // Bij een actief zoekfilter: matchende categorieën automatisch uitklappen voor zichtbaarheid
+    if (term.length > 0 && catVisible > 0 && catVisible < cat.querySelectorAll('.animal').length + 1) {
+      cat.classList.add('expanded');
+    } else if (term.length === 0) {
+      // Zoekterm leeg: terug naar opgeslagen voorkeur
+      cat.classList.toggle('expanded', expandedCategories.has(cat.dataset.name));
+    }
   });
   document.getElementById('noResults').classList.toggle('show', totalVisible === 0 && term.length > 0);
 }
+
 function setSort(mode) { sortMode = mode; try { localStorage.setItem(SORT_KEY, mode); } catch(e) {} document.getElementById('sortCommon').classList.toggle('active', mode === 'common'); document.getElementById('sortRare').classList.toggle('active', mode === 'rare'); render(); }
 
 let currentLightboxAnimal = null;
@@ -811,7 +888,6 @@ async function openLightbox(animal, categoryName) {
   if (cached && cached.full) img.src = cached.full;
   renderPinsList();
 }
-
 function renderPinsList() {
   if (!currentLightboxAnimal) return;
   const key = makeKey(currentLightboxCategory, currentLightboxAnimal.name);
@@ -849,7 +925,6 @@ function ensureMap() {
   return map;
 }
 function clearMapMarkers() { if (!map) return; map.eachLayer(layer => { if (layer instanceof L.Marker || layer instanceof L.CircleMarker) map.removeLayer(layer); }); }
-
 function makeAnimalIcon(emoji, isHighlight) {
   const size = isHighlight ? 36 : 30;
   const bg = isHighlight ? '#b8935a' : '#2d3a2e';
@@ -872,7 +947,6 @@ function openSpotMap() {
   setTimeout(() => map.invalidateSize(), 100);
   clearMapMarkers();
   document.getElementById('mapInstruction').classList.remove('show');
-  
   const bounds = [];
   Object.entries(pins).forEach(([key, pinList]) => {
     const found = findAnimalByKey(key);
@@ -891,7 +965,6 @@ function openSpotMap() {
       bounds.push([p.lat, p.lng]);
     });
   });
-  
   if (bounds.length > 0) { map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 }); }
   else { map.setView(HIGHLANDS_CENTER, HIGHLANDS_ZOOM); }
   document.getElementById('mapToolbar').innerHTML = '<button class="map-tool-btn" onclick="closeMap()">Sluit</button>';
@@ -907,7 +980,6 @@ function startPinning() {
   ensureMap();
   setTimeout(() => map.invalidateSize(), 100);
   clearMapMarkers();
-  
   const key = makeKey(currentLightboxCategory, currentLightboxAnimal.name);
   const existing = pins[key] || [];
   const emoji = getAnimalEmoji(currentLightboxAnimal, currentLightboxCategory);
@@ -918,10 +990,8 @@ function startPinning() {
     const marker = L.marker([p.lat, p.lng], { icon: makeAnimalIcon(emoji, true) }).addTo(map);
     marker.bindPopup('<div class="popup-title">' + currentLightboxAnimal.name + '</div><div class="popup-when">' + dateStr + ' · ' + timeStr + '</div>');
   });
-  
   if (existing.length > 0) { map.fitBounds(existing.map(p => [p.lat, p.lng]), { padding: [60, 60], maxZoom: 15 }); }
   else { map.setView(HIGHLANDS_CENTER, HIGHLANDS_ZOOM); }
-  
   document.getElementById('mapInstruction').classList.add('show');
   document.getElementById('mapToolbar').innerHTML = '<button class="map-tool-btn" onclick="useCurrentLocation()">📍 Mijn locatie</button><button class="map-tool-btn" onclick="closeMap()">Klaar</button>';
   map.off('click');
@@ -969,8 +1039,8 @@ function closeMap() {
 
 async function resetAll() {
   if (confirm('Alle gespotte dieren én pin-locaties én levels wissen?')) {
-    spotted = {}; pins = {}; lastLevelIndex = 0;
-    saveLastLevel();
+    spotted = {}; pins = {}; lastLevelIndex = 0; expandedCategories.clear();
+    saveLastLevel(); saveExpanded();
     await Promise.all([saveState(), savePins()]);
     document.cookie = STORAGE_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     document.cookie = PINS_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
