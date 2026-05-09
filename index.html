@@ -55,7 +55,7 @@
   .category-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--bone); }
   .category-count { margin-left: auto; font-size: 10px; letter-spacing: 0.2em; color: var(--mist); opacity: 0.5; text-transform: uppercase; }
   .animal-list { display: flex; flex-direction: column; gap: 10px; }
-  .animal { display: flex; align-items: center; gap: 14px; padding: 12px; background: rgba(232, 227, 216, 0.03); border: 1px solid rgba(232, 227, 216, 0.08); border-radius: 4px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+  .animal { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(232, 227, 216, 0.03); border: 1px solid rgba(232, 227, 216, 0.08); border-radius: 4px; transition: all 0.3s ease; position: relative; overflow: hidden; }
   .animal.hidden { display: none; }
   .animal::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: scaleY(0); transition: transform 0.3s ease; transform-origin: top; }
   .animal.spotted { background: rgba(184, 147, 90, 0.08); border-color: rgba(184, 147, 90, 0.3); }
@@ -75,7 +75,13 @@
   .rarity-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--mist); opacity: 0.2; }
   .rarity-dot.filled { opacity: 0.7; background: var(--gold); }
   .pin-count { margin-left: 8px; font-size: 10px; color: var(--gold); opacity: 0.8; letter-spacing: 0.05em; }
-  .check { width: 28px; height: 28px; border: 1.5px solid rgba(232, 227, 216, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s ease; background: transparent; cursor: pointer; }
+  .animal-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; align-items: center; }
+  .quickpin { width: 28px; height: 28px; border: 1.5px solid rgba(184, 147, 90, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: transparent; cursor: pointer; transition: all 0.2s ease; padding: 0; color: var(--gold); }
+  .quickpin:active { transform: scale(0.92); background: rgba(184, 147, 90, 0.15); }
+  .quickpin.loading { animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .quickpin svg { width: 14px; height: 14px; fill: currentColor; }
+  .check { width: 28px; height: 28px; border: 1.5px solid rgba(232, 227, 216, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: transparent; cursor: pointer; }
   .animal.spotted .check { border-color: var(--gold); background: var(--gold); }
   .check svg { width: 14px; height: 14px; stroke: var(--ink); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(0.5); transition: all 0.3s ease; }
   .animal.spotted .check svg { opacity: 1; transform: scale(1); }
@@ -113,7 +119,7 @@
   .modal p { font-size: 13px; line-height: 1.6; color: var(--mist); opacity: 0.85; margin-bottom: 14px; }
   .modal textarea { width: 100%; min-height: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(232, 227, 216, 0.15); border-radius: 3px; color: var(--bone); font-family: monospace; font-size: 11px; padding: 10px; resize: vertical; }
   .modal-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1300; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1300; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
   .toast.show { opacity: 1; }
   .map-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 1200; display: none; flex-direction: column; }
   .map-overlay.show { display: flex; }
@@ -185,7 +191,8 @@
       <div class="rarity-large" id="lightboxRarity"></div>
       <div class="rarity-label" id="lightboxRarityLabel"></div>
       <div class="lightbox-actions">
-        <button class="btn primary" onclick="startPinning()">📍 Locatie pinnen</button>
+        <button class="btn primary" onclick="quickPinFromLightbox()">⚡ Pin op mijn locatie</button>
+        <button class="btn" onclick="startPinning()">🗺️ Pin op kaart</button>
       </div>
       <div class="pins-list" id="pinsList"></div>
     </div>
@@ -414,7 +421,6 @@ const STORAGE_KEY = 'highlands-spotted-v2';
 const PINS_KEY = 'highlands-pins-v1';
 const IMAGE_CACHE_KEY = 'highlands-images-v4';
 const SORT_KEY = 'highlands-sort';
-// Centrum van de Schotse Highlands (rond Inverness/Cairngorms)
 const HIGHLANDS_CENTER = [57.0, -4.5];
 const HIGHLANDS_ZOOM = 8;
 
@@ -514,11 +520,24 @@ function render() {
       const el = document.createElement('div');
       el.className = 'animal' + (isSpotted ? ' spotted' : '');
       el.dataset.searchText = (animal.name + ' ' + animal.latin).toLowerCase();
-      el.innerHTML = '<div class="animal-img-wrap">' + imgHtml + '</div><div class="animal-info"><div class="animal-name">' + animal.name + '</div><div class="animal-latin">' + animal.latin + '</div><div class="rarity">' + dots + pinBadge + '</div></div><div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>';
+      el.innerHTML =
+        '<div class="animal-img-wrap">' + imgHtml + '</div>' +
+        '<div class="animal-info">' +
+          '<div class="animal-name">' + animal.name + '</div>' +
+          '<div class="animal-latin">' + animal.latin + '</div>' +
+          '<div class="rarity">' + dots + pinBadge + '</div>' +
+        '</div>' +
+        '<div class="animal-actions">' +
+          '<button class="quickpin" title="Pin op mijn locatie" aria-label="Pin op mijn locatie">' +
+            '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>' +
+          '</button>' +
+          '<div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>' +
+        '</div>';
       const toggleSpot = async (e) => { e.stopPropagation(); if (spotted[key]) delete spotted[key]; else { spotted[key] = Date.now(); if (navigator.vibrate) navigator.vibrate(15); } await saveState(); render(); applyFilter(); };
       el.querySelector('.animal-info').addEventListener('click', toggleSpot);
       el.querySelector('.check').addEventListener('click', toggleSpot);
       el.querySelector('.animal-img-wrap').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(animal, cat.name); });
+      el.querySelector('.quickpin').addEventListener('click', (e) => { e.stopPropagation(); quickPinAtCurrentLocation(animal, cat.name, e.currentTarget); });
       list.appendChild(el);
     });
     container.appendChild(catEl);
@@ -527,6 +546,46 @@ function render() {
   document.getElementById('totalAnimals').textContent = totalAnimals;
   document.getElementById('totalPins').textContent = totalPinsCount();
   applyFilter();
+}
+
+// === QUICK PIN: lees GPS, pin meteen, vink af, alles in 1 stap ===
+async function quickPinAtCurrentLocation(animal, categoryName, buttonEl) {
+  if (!navigator.geolocation) {
+    showToast('GPS niet beschikbaar op dit toestel');
+    return;
+  }
+  // Visual feedback: pulse loading state
+  if (buttonEl) buttonEl.classList.add('loading');
+  showToast('📡 Locatie ophalen...');
+  
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    const key = makeKey(categoryName, animal.name);
+    if (!pins[key]) pins[key] = [];
+    const ts = Date.now();
+    pins[key].push({ lat, lng, ts });
+    if (!spotted[key]) spotted[key] = ts;
+    await Promise.all([savePins(), saveState()]);
+    if (buttonEl) buttonEl.classList.remove('loading');
+    if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
+    showToast('✓ ' + animal.name + ' gepind op je locatie!');
+    render();
+  }, (err) => {
+    if (buttonEl) buttonEl.classList.remove('loading');
+    let msg = 'GPS-fout';
+    if (err.code === 1) msg = 'Geen locatie-toegang. Sta toe in iPhone Instellingen → Safari → Locatie';
+    else if (err.code === 2) msg = 'Locatie onbeschikbaar';
+    else if (err.code === 3) msg = 'Locatie ophalen duurde te lang';
+    showToast(msg);
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 });
+}
+
+async function quickPinFromLightbox() {
+  if (!currentLightboxAnimal || !currentLightboxCategory) return;
+  await quickPinAtCurrentLocation(currentLightboxAnimal, currentLightboxCategory, null);
+  // Refresh pinslijst in de lightbox
+  renderPinsList();
 }
 
 async function loadAllImages(retryFailed) {
@@ -775,7 +834,7 @@ async function restoreBackup() {
     showToast('Hersteld: ' + Object.keys(spotted).length + ' vinkjes, ' + totalPinsCount() + ' pins');
   } catch(e) { showToast('Ongeldige code'); }
 }
-function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2800); }
 function clearSearch() { document.getElementById('searchInput').value = ''; searchTerm = ''; document.getElementById('searchClear').classList.remove('show'); applyFilter(); }
 document.getElementById('searchInput').addEventListener('input', (e) => { searchTerm = e.target.value; document.getElementById('searchClear').classList.toggle('show', searchTerm.length > 0); applyFilter(); });
 
