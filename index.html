@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root { --moss: #2d3a2e; --heather: #6b4e6f; --mist: #c4cdc1; --bone: #e8e3d8; --ink: #1a1f1a; --gold: #b8935a; --gold-light: #d4ad75; --rust: #8b4a32; }
@@ -30,6 +32,8 @@
   .stat { text-align: center; }
   .stat-num { font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1; }
   .stat-label { font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-top: 6px; }
+  .map-cta { display: block; margin: 18px auto 0; padding: 12px 24px; background: rgba(184, 147, 90, 0.1); border: 1px solid var(--gold); color: var(--gold); font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
+  .map-cta:active { background: rgba(184, 147, 90, 0.2); }
   .loading-banner { background: rgba(184, 147, 90, 0.1); border: 1px solid rgba(184, 147, 90, 0.3); color: var(--gold); text-align: center; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; font-size: 12px; display: none; }
   .loading-banner.show { display: block; }
   .controls-bar { position: sticky; top: env(safe-area-inset-top); z-index: 10; background: linear-gradient(180deg, #1a1f1a 0%, #1a1f1a 80%, transparent 100%); padding: 12px 0 16px; margin-bottom: 16px; }
@@ -67,9 +71,10 @@
   .animal-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--bone); line-height: 1.2; transition: color 0.3s ease; }
   .animal.spotted .animal-name { color: var(--gold); }
   .animal-latin { font-style: italic; color: var(--mist); opacity: 0.55; margin-top: 2px; font-family: 'Cormorant Garamond', serif; font-size: 13px; }
-  .rarity { display: flex; gap: 2px; margin-top: 6px; }
+  .rarity { display: flex; gap: 2px; margin-top: 6px; align-items: center; }
   .rarity-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--mist); opacity: 0.2; }
   .rarity-dot.filled { opacity: 0.7; background: var(--gold); }
+  .pin-count { margin-left: 8px; font-size: 10px; color: var(--gold); opacity: 0.8; letter-spacing: 0.05em; }
   .check { width: 28px; height: 28px; border: 1.5px solid rgba(232, 227, 216, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s ease; background: transparent; cursor: pointer; }
   .animal.spotted .check { border-color: var(--gold); background: var(--gold); }
   .check svg { width: 14px; height: 14px; stroke: var(--ink); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: scale(0.5); transition: all 0.3s ease; }
@@ -81,7 +86,7 @@
   .ornament { text-align: center; color: var(--gold); opacity: 0.4; margin: 8px 0 0; font-size: 14px; letter-spacing: 0.5em; }
   .no-results { text-align: center; padding: 60px 20px; color: var(--mist); opacity: 0.6; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; display: none; }
   .no-results.show { display: block; }
-  .lightbox { position: fixed; inset: 0; background: rgba(10, 13, 10, 0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; padding-top: max(60px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); animation: fadeIn 0.25s ease; }
+  .lightbox { position: fixed; inset: 0; background: rgba(10, 13, 10, 0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; padding-top: max(60px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); animation: fadeIn 0.25s ease; overflow-y: auto; }
   .lightbox.show { display: flex; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .lightbox-content { max-width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
@@ -94,7 +99,13 @@
   .lightbox-caption .rarity-large { display: flex; gap: 5px; justify-content: center; margin-top: 8px; }
   .lightbox-caption .rarity-large .rarity-dot { width: 7px; height: 7px; }
   .lightbox-caption .rarity-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); opacity: 0.5; margin-top: 14px; }
-  .lightbox-close { position: absolute; top: max(20px, env(safe-area-inset-top)); right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(232, 227, 216, 0.1); border: 1px solid rgba(232, 227, 216, 0.2); color: var(--bone); font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; line-height: 1; }
+  .lightbox-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+  .lightbox-close { position: absolute; top: max(20px, env(safe-area-inset-top)); right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(232, 227, 216, 0.1); border: 1px solid rgba(232, 227, 216, 0.2); color: var(--bone); font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; line-height: 1; z-index: 10; }
+  .pins-list { width: 100%; max-width: 420px; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .pin-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(232, 227, 216, 0.04); border: 1px solid rgba(232, 227, 216, 0.08); border-radius: 3px; font-size: 12px; }
+  .pin-item .pin-when { color: var(--mist); opacity: 0.7; flex: 1; font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; }
+  .pin-item .pin-del { background: transparent; border: none; color: var(--mist); opacity: 0.4; font-size: 16px; cursor: pointer; padding: 2px 6px; }
+  .pin-item .pin-del:active { opacity: 1; color: var(--rust); }
   .modal { position: fixed; inset: 0; background: rgba(10, 13, 10, 0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 1100; display: none; align-items: center; justify-content: center; padding: 24px; padding-top: max(40px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); }
   .modal.show { display: flex; }
   .modal-content { background: linear-gradient(135deg, #1f2920 0%, #161a17 100%); border: 1px solid rgba(232, 227, 216, 0.15); border-radius: 6px; padding: 28px 24px; max-width: 480px; width: 100%; max-height: 80vh; overflow-y: auto; }
@@ -102,8 +113,28 @@
   .modal p { font-size: 13px; line-height: 1.6; color: var(--mist); opacity: 0.85; margin-bottom: 14px; }
   .modal textarea { width: 100%; min-height: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(232, 227, 216, 0.15); border-radius: 3px; color: var(--bone); font-family: monospace; font-size: 11px; padding: 10px; resize: vertical; }
   .modal-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1200; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1300; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
   .toast.show { opacity: 1; }
+  .map-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 1200; display: none; flex-direction: column; }
+  .map-overlay.show { display: flex; }
+  .map-header { padding: max(16px, env(safe-area-inset-top)) 20px 16px; display: flex; align-items: center; gap: 12px; background: linear-gradient(180deg, rgba(26,31,26,0.95) 0%, rgba(26,31,26,0.8) 100%); position: relative; z-index: 5; border-bottom: 1px solid rgba(232,227,216,0.08); }
+  .map-header h2 { flex: 1; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--bone); }
+  .map-header .map-subtitle { font-size: 11px; color: var(--mist); opacity: 0.6; font-style: italic; margin-top: 2px; }
+  .map-header .header-text { flex: 1; }
+  .map-close-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(232, 227, 216, 0.1); border: 1px solid rgba(232, 227, 216, 0.2); color: var(--bone); font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; line-height: 1; flex-shrink: 0; }
+  #map { flex: 1; width: 100%; background: #1a1f1a; }
+  .map-toolbar { position: absolute; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; padding: 0 16px; }
+  .map-tool-btn { padding: 10px 16px; background: rgba(26, 31, 26, 0.95); border: 1px solid var(--gold); color: var(--gold); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; border-radius: 4px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .map-tool-btn:active { background: rgba(184, 147, 90, 0.2); }
+  .map-instruction { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 10px 18px; background: rgba(184, 147, 90, 0.95); color: var(--ink); border-radius: 20px; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; max-width: 90%; text-align: center; }
+  .map-instruction.show { display: block; }
+  .leaflet-popup-content-wrapper { background: #1f2920; color: var(--bone); border-radius: 4px; border: 1px solid rgba(184, 147, 90, 0.3); }
+  .leaflet-popup-tip { background: #1f2920; }
+  .leaflet-popup-content { margin: 12px 14px; font-family: 'Inter', sans-serif; }
+  .popup-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--gold); margin-bottom: 4px; }
+  .popup-when { font-size: 11px; color: var(--mist); opacity: 0.8; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px; }
+  .popup-img { width: 60px; height: 60px; object-fit: cover; border-radius: 3px; margin-top: 6px; }
+  .leaflet-container a.leaflet-popup-close-button { color: var(--bone); }
   @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } .crest { width: 150px; } }
 </style>
 </head>
@@ -118,7 +149,9 @@
     <div class="stats">
       <div class="stat"><div class="stat-num" id="totalSpotted">0</div><div class="stat-label">Gespot</div></div>
       <div class="stat"><div class="stat-num" id="totalAnimals">0</div><div class="stat-label">Totaal</div></div>
+      <div class="stat"><div class="stat-num" id="totalPins">0</div><div class="stat-label">Locaties</div></div>
     </div>
+    <button class="map-cta" onclick="openSpotMap()">🗺️ Mijn spot-kaart</button>
   </header>
   <div class="loading-banner" id="loadingBanner">📷 Foto's worden geladen...</div>
   <div class="controls-bar">
@@ -141,6 +174,7 @@
     <button class="btn" onclick="resetAll()">Reset alles</button>
   </div>
 </div>
+
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <button class="lightbox-close" onclick="closeLightbox(event)">×</button>
   <div class="lightbox-content" onclick="event.stopPropagation()">
@@ -150,13 +184,31 @@
       <div class="latin" id="lightboxLatin"></div>
       <div class="rarity-large" id="lightboxRarity"></div>
       <div class="rarity-label" id="lightboxRarityLabel"></div>
+      <div class="lightbox-actions">
+        <button class="btn primary" onclick="startPinning()">📍 Locatie pinnen</button>
+      </div>
+      <div class="pins-list" id="pinsList"></div>
     </div>
   </div>
 </div>
+
+<div class="map-overlay" id="mapOverlay">
+  <div class="map-header">
+    <button class="map-close-btn" onclick="closeMap()">×</button>
+    <div class="header-text">
+      <h2 id="mapTitle">Spot-kaart</h2>
+      <div class="map-subtitle" id="mapSubtitle">Scottish Highlands</div>
+    </div>
+  </div>
+  <div id="map"></div>
+  <div class="map-instruction" id="mapInstruction">Tik op de kaart waar je het dier zag</div>
+  <div class="map-toolbar" id="mapToolbar"></div>
+</div>
+
 <div class="modal" id="backupModal">
   <div class="modal-content">
     <h2>Backup &amp; Herstel</h2>
-    <p>Sla je voortgang op of plak een eerdere code terug om te herstellen.</p>
+    <p>Sla je voortgang en pin-locaties op of plak een eerdere code terug om te herstellen.</p>
     <textarea id="backupCode" spellcheck="false" autocapitalize="off"></textarea>
     <div class="modal-actions">
       <button class="btn primary" onclick="copyBackup()">Kopieer</button>
@@ -166,6 +218,7 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
 <script>
 const data = [
   { name: 'Boerderijdieren', icon: '🐓', animals: [
@@ -329,7 +382,6 @@ const data = [
     { name: 'Klein koolwitje', latin: 'Pieris rapae', rarity: 1, wiki: 'Pieris_rapae' },
     { name: 'Oranjetipje', latin: 'Anthocharis cardamines', rarity: 3, wiki: 'Anthocharis_cardamines' },
     { name: 'Bont zandoogje', latin: 'Pararge aegeria', rarity: 2, wiki: 'Pararge_aegeria' },
-    { name: 'Bergparelmoervlinder', latin: 'Boloria napaea', rarity: 5, wiki: 'Boloria_napaea' },
     { name: 'Heideblauwtje', latin: 'Plebejus argus', rarity: 4, wiki: 'Plebejus_argus' },
     { name: 'Lieveheersbeestje', latin: 'Coccinella septempunctata', rarity: 1, wiki: 'Coccinella_septempunctata' },
     { name: 'Libel (gewone oeverlibel)', latin: 'Libellula depressa', rarity: 3, wiki: 'Libellula_depressa' },
@@ -339,23 +391,47 @@ const data = [
     { name: 'Oorworm', latin: 'Forficula auricularia', rarity: 2, wiki: 'Forficula_auricularia' },
     { name: 'Kruisspin', latin: 'Araneus diadematus', rarity: 2, wiki: 'European_garden_spider' },
     { name: 'Wolfsspin', latin: 'Pardosa', rarity: 3, wiki: 'Pardosa' },
-    { name: 'Schotse muggen', latin: 'Culicoides impunctatus', rarity: 1, wiki: 'Culicoides_impunctatus' },
+    { name: 'Schotse muggen (midges)', latin: 'Culicoides impunctatus', rarity: 1, wiki: 'Culicoides_impunctatus' },
+  ]},
+  { name: '🚗 Road kills', icon: '💀', animals: [
+    { name: 'Fazant (platgereden)', latin: 'Phasianus colchicus', rarity: 1, wiki: 'Common_pheasant' },
+    { name: 'Konijn (platgereden)', latin: 'Oryctolagus cuniculus', rarity: 1, wiki: 'European_rabbit' },
+    { name: 'Egel (platgereden)', latin: 'Erinaceus europaeus', rarity: 2, wiki: 'European_hedgehog' },
+    { name: 'Eekhoorn (platgereden)', latin: 'Sciurus', rarity: 2, wiki: 'Eastern_gray_squirrel' },
+    { name: 'Schaap (langs de weg)', latin: 'Ovis aries', rarity: 2, wiki: 'Sheep' },
+    { name: 'Vos (platgereden)', latin: 'Vulpes vulpes', rarity: 3, wiki: 'Red_fox' },
+    { name: 'Das (platgereden)', latin: 'Meles meles', rarity: 3, wiki: 'European_badger' },
+    { name: 'Ree (langs de weg)', latin: 'Capreolus capreolus', rarity: 3, wiki: 'Roe_deer' },
+    { name: 'Edelhert (langs de weg)', latin: 'Cervus elaphus', rarity: 4, wiki: 'Red_deer' },
+    { name: 'Eend (platgereden)', latin: 'Anas platyrhynchos', rarity: 3, wiki: 'Mallard' },
+    { name: 'Kraai (platgereden)', latin: 'Corvus corone', rarity: 2, wiki: 'Carrion_crow' },
+    { name: 'Mol (platgereden)', latin: 'Talpa europaea', rarity: 3, wiki: 'European_mole' },
   ]}
 ];
+
 const RARITY_LABELS = ['', 'Zeer algemeen', 'Algemeen', 'Soms', 'Zeldzaam', 'Zeer zeldzaam'];
 const STORAGE_KEY = 'highlands-spotted-v2';
+const PINS_KEY = 'highlands-pins-v1';
 const IMAGE_CACHE_KEY = 'highlands-images-v4';
 const SORT_KEY = 'highlands-sort';
+// Centrum van de Schotse Highlands (rond Inverness/Cairngorms)
+const HIGHLANDS_CENTER = [57.0, -4.5];
+const HIGHLANDS_ZOOM = 8;
+
 let spotted = {};
+let pins = {};
 let imageCache = {};
 let db = null;
 let searchTerm = '';
 let sortMode = 'common';
+let map = null;
+let currentPinAnimal = null;
+let pinningMode = false;
 
 function openDB() { return new Promise((resolve) => { try { const req = indexedDB.open('highlands-spotter', 1); req.onupgradeneeded = (e) => { const d = e.target.result; if (!d.objectStoreNames.contains('state')) d.createObjectStore('state'); }; req.onsuccess = (e) => { db = e.target.result; resolve(db); }; req.onerror = () => resolve(null); } catch(e) { resolve(null); } }); }
 async function dbGet(key) { if (!db) return null; return new Promise((r) => { try { const tx = db.transaction('state', 'readonly'); const req = tx.objectStore('state').get(key); req.onsuccess = () => r(req.result); req.onerror = () => r(null); } catch(e) { r(null); } }); }
 async function dbSet(key, value) { if (!db) return; return new Promise((r) => { try { const tx = db.transaction('state', 'readwrite'); tx.objectStore('state').put(value, key); tx.oncomplete = () => r(); tx.onerror = () => r(); } catch(e) { r(); } }); }
-function setCookie(name, value) { try { const d = new Date(); d.setFullYear(d.getFullYear() + 5); document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`; } catch(e) {} }
+function setCookie(name, value) { try { const d = new Date(); d.setFullYear(d.getFullYear() + 5); document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax'; } catch(e) {} }
 function getCookie(name) { try { const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : null; } catch(e) { return null; } }
 
 async function loadState() {
@@ -366,6 +442,14 @@ async function loadState() {
   let best = null, bestCount = -1;
   for (const s of sources) { try { const obj = JSON.parse(s); const c = Object.keys(obj).length; if (c > bestCount) { bestCount = c; best = obj; } } catch(e) {} }
   spotted = best || {};
+  
+  const pinSources = [];
+  try { const v = await dbGet(PINS_KEY); if (v) pinSources.push(v); } catch(e) {}
+  try { const v = localStorage.getItem(PINS_KEY); if (v) pinSources.push(v); } catch(e) {}
+  let bestPins = null, bestPinCount = -1;
+  for (const s of pinSources) { try { const obj = JSON.parse(s); const total = Object.values(obj).reduce((a, arr) => a + (Array.isArray(arr) ? arr.length : 0), 0); if (total > bestPinCount) { bestPinCount = total; bestPins = obj; } } catch(e) {} }
+  pins = bestPins || {};
+  
   try { const cached = await dbGet(IMAGE_CACHE_KEY); if (cached) imageCache = typeof cached === 'string' ? JSON.parse(cached) : cached; } catch(e) {}
   if (!imageCache || Object.keys(imageCache).length === 0) {
     try { const ls = localStorage.getItem(IMAGE_CACHE_KEY); if (ls) imageCache = JSON.parse(ls); } catch(e) { imageCache = {}; }
@@ -373,31 +457,11 @@ async function loadState() {
   try { const s = localStorage.getItem(SORT_KEY); if (s === 'rare' || s === 'common') sortMode = s; } catch(e) {}
 }
 async function saveState() { const json = JSON.stringify(spotted); try { localStorage.setItem(STORAGE_KEY, json); } catch(e) {} setCookie(STORAGE_KEY, json); await dbSet(STORAGE_KEY, json); }
+async function savePins() { const json = JSON.stringify(pins); try { localStorage.setItem(PINS_KEY, json); } catch(e) {} await dbSet(PINS_KEY, json); }
 async function saveImageCache() { const json = JSON.stringify(imageCache); try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {} await dbSet(IMAGE_CACHE_KEY, json); }
 
-async function fetchImageStrategy1(wikiPage) {
-  try {
-    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiPage)}`;
-    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
-    if (!r.ok) return null;
-    const j = await r.json();
-    if (j.thumbnail?.source) return { thumb: j.thumbnail.source, full: j.originalimage?.source || j.thumbnail.source };
-  } catch(e) {}
-  return null;
-}
-async function fetchImageStrategy2(searchTerm) {
-  try {
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail|original&pithumbsize=400&generator=search&gsrsearch=${encodeURIComponent(searchTerm)}&gsrlimit=1&origin=*`;
-    const r = await fetch(searchUrl);
-    if (!r.ok) return null;
-    const j = await r.json();
-    const pages = j.query?.pages;
-    if (!pages) return null;
-    const page = Object.values(pages)[0];
-    if (page?.thumbnail?.source) return { thumb: page.thumbnail.source, full: page.original?.source || page.thumbnail.source };
-  } catch(e) {}
-  return null;
-}
+async function fetchImageStrategy1(wikiPage) { try { const url = 'https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(wikiPage); const r = await fetch(url, { headers: { 'Accept': 'application/json' } }); if (!r.ok) return null; const j = await r.json(); if (j.thumbnail && j.thumbnail.source) return { thumb: j.thumbnail.source, full: (j.originalimage && j.originalimage.source) || j.thumbnail.source }; } catch(e) {} return null; }
+async function fetchImageStrategy2(searchTerm) { try { const searchUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail|original&pithumbsize=400&generator=search&gsrsearch=' + encodeURIComponent(searchTerm) + '&gsrlimit=1&origin=*'; const r = await fetch(searchUrl); if (!r.ok) return null; const j = await r.json(); const pages = j.query && j.query.pages; if (!pages) return null; const page = Object.values(pages)[0]; if (page && page.thumbnail && page.thumbnail.source) return { thumb: page.thumbnail.source, full: (page.original && page.original.source) || page.thumbnail.source }; } catch(e) {} return null; }
 async function fetchAnimalImage(animal) {
   const cacheKey = animal.wiki;
   if (imageCache[cacheKey] && imageCache[cacheKey].thumb) return imageCache[cacheKey];
@@ -409,6 +473,19 @@ async function fetchAnimalImage(animal) {
 }
 
 function makeKey(c, n) { return c + '::' + n; }
+function findAnimalByKey(key) {
+  const parts = key.split('::');
+  const catName = parts[0];
+  const animalName = parts[1];
+  for (const cat of data) {
+    if (cat.name === catName) {
+      const found = cat.animals.find(a => a.name === animalName);
+      if (found) return { animal: found, category: cat };
+    }
+  }
+  return null;
+}
+function totalPinsCount() { return Object.values(pins).reduce((a, arr) => a + (Array.isArray(arr) ? arr.length : 0), 0); }
 
 function render() {
   const container = document.getElementById('categories');
@@ -421,56 +498,53 @@ function render() {
     totalSpotted += catSpotted;
     const catEl = document.createElement('section');
     catEl.className = 'category';
-    catEl.innerHTML = `<div class="category-header"><span class="category-icon">${cat.icon}</span><span class="category-name">${cat.name}</span><span class="category-count">${catSpotted} / ${sorted.length}</span></div><div class="animal-list"></div>`;
+    catEl.innerHTML = '<div class="category-header"><span class="category-icon">' + cat.icon + '</span><span class="category-name">' + cat.name + '</span><span class="category-count">' + catSpotted + ' / ' + sorted.length + '</span></div><div class="animal-list"></div>';
     const list = catEl.querySelector('.animal-list');
     sorted.forEach(animal => {
       const key = makeKey(cat.name, animal.name);
       const isSpotted = !!spotted[key];
-      const dots = Array.from({length: 5}, (_, i) => `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`).join('');
+      const animalPins = pins[key] || [];
+      const dots = Array.from({length: 5}, (_, i) => '<span class="rarity-dot ' + (i < animal.rarity ? 'filled' : '') + '"></span>').join('');
+      const pinBadge = animalPins.length > 0 ? '<span class="pin-count">📍 ' + animalPins.length + '</span>' : '';
       const cached = imageCache[animal.wiki];
       let imgHtml;
-      if (cached && cached.thumb) imgHtml = `<img class="animal-img" src="${cached.thumb}" alt="${animal.name}" loading="lazy" referrerpolicy="no-referrer">`;
-      else if (cached && cached.failed) imgHtml = `<div class="img-placeholder">?</div>`;
-      else imgHtml = `<div class="img-loading" data-wiki="${animal.wiki}"></div>`;
+      if (cached && cached.thumb) imgHtml = '<img class="animal-img" src="' + cached.thumb + '" alt="' + animal.name + '" loading="lazy" referrerpolicy="no-referrer">';
+      else if (cached && cached.failed) imgHtml = '<div class="img-placeholder">?</div>';
+      else imgHtml = '<div class="img-loading" data-wiki="' + animal.wiki + '"></div>';
       const el = document.createElement('div');
       el.className = 'animal' + (isSpotted ? ' spotted' : '');
       el.dataset.searchText = (animal.name + ' ' + animal.latin).toLowerCase();
-      el.innerHTML = `<div class="animal-img-wrap">${imgHtml}</div><div class="animal-info"><div class="animal-name">${animal.name}</div><div class="animal-latin">${animal.latin}</div><div class="rarity">${dots}</div></div><div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>`;
+      el.innerHTML = '<div class="animal-img-wrap">' + imgHtml + '</div><div class="animal-info"><div class="animal-name">' + animal.name + '</div><div class="animal-latin">' + animal.latin + '</div><div class="rarity">' + dots + pinBadge + '</div></div><div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>';
       const toggleSpot = async (e) => { e.stopPropagation(); if (spotted[key]) delete spotted[key]; else { spotted[key] = Date.now(); if (navigator.vibrate) navigator.vibrate(15); } await saveState(); render(); applyFilter(); };
       el.querySelector('.animal-info').addEventListener('click', toggleSpot);
       el.querySelector('.check').addEventListener('click', toggleSpot);
-      el.querySelector('.animal-img-wrap').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(animal); });
+      el.querySelector('.animal-img-wrap').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(animal, cat.name); });
       list.appendChild(el);
     });
     container.appendChild(catEl);
   });
   document.getElementById('totalSpotted').textContent = totalSpotted;
   document.getElementById('totalAnimals').textContent = totalAnimals;
+  document.getElementById('totalPins').textContent = totalPinsCount();
   applyFilter();
 }
 
-async function loadAllImages(retryFailed = false) {
+async function loadAllImages(retryFailed) {
   const allAnimals = data.flatMap(c => c.animals);
-  const todo = allAnimals.filter(a => {
-    const c = imageCache[a.wiki];
-    if (!c) return true;
-    if (retryFailed && c.failed) return true;
-    if (!c.thumb && !c.failed) return true;
-    return false;
-  });
+  const todo = allAnimals.filter(a => { const c = imageCache[a.wiki]; if (!c) return true; if (retryFailed && c.failed) return true; if (!c.thumb && !c.failed) return true; return false; });
   if (todo.length === 0) return;
   if (retryFailed) todo.forEach(a => { delete imageCache[a.wiki]; });
   const banner = document.getElementById('loadingBanner');
   banner.classList.add('show');
   let done = 0;
-  banner.textContent = `📷 Foto's laden... 0/${todo.length}`;
+  banner.textContent = '📷 Foto\'s laden... 0/' + todo.length;
   for (let i = 0; i < todo.length; i += 4) {
     const batch = todo.slice(i, i + 4);
     await Promise.all(batch.map(async a => {
       await fetchAnimalImage(a);
       done++;
-      banner.textContent = `📷 Foto's laden... ${done}/${todo.length}`;
-      document.querySelectorAll(`.img-loading[data-wiki="${a.wiki}"]`).forEach(ph => {
+      banner.textContent = '📷 Foto\'s laden... ' + done + '/' + todo.length;
+      document.querySelectorAll('.img-loading[data-wiki="' + a.wiki + '"]').forEach(ph => {
         const cached = imageCache[a.wiki];
         if (cached && cached.thumb) {
           const img = document.createElement('img');
@@ -483,7 +557,7 @@ async function loadAllImages(retryFailed = false) {
     await saveImageCache();
   }
   const failedCount = Object.values(imageCache).filter(c => c.failed).length;
-  banner.textContent = failedCount === 0 ? `✓ Alle foto's geladen` : `✓ ${todo.length - failedCount}/${todo.length} foto's geladen`;
+  banner.textContent = failedCount === 0 ? '✓ Alle foto\'s geladen' : '✓ ' + (todo.length - failedCount) + '/' + todo.length + ' foto\'s geladen';
   setTimeout(() => banner.classList.remove('show'), 2500);
 }
 async function reloadFailedImages() { showToast('Faalde foto\'s opnieuw laden...'); await loadAllImages(true); render(); }
@@ -493,30 +567,23 @@ function applyFilter() {
   let totalVisible = 0;
   document.querySelectorAll('.category').forEach(cat => {
     let catVisible = 0;
-    cat.querySelectorAll('.animal').forEach(an => {
-      const match = !term || an.dataset.searchText.includes(term);
-      an.classList.toggle('hidden', !match);
-      if (match) catVisible++;
-    });
+    cat.querySelectorAll('.animal').forEach(an => { const match = !term || an.dataset.searchText.includes(term); an.classList.toggle('hidden', !match); if (match) catVisible++; });
     cat.classList.toggle('hidden', catVisible === 0);
     totalVisible += catVisible;
   });
   document.getElementById('noResults').classList.toggle('show', totalVisible === 0 && term.length > 0);
 }
+function setSort(mode) { sortMode = mode; try { localStorage.setItem(SORT_KEY, mode); } catch(e) {} document.getElementById('sortCommon').classList.toggle('active', mode === 'common'); document.getElementById('sortRare').classList.toggle('active', mode === 'rare'); render(); }
 
-function setSort(mode) {
-  sortMode = mode;
-  try { localStorage.setItem(SORT_KEY, mode); } catch(e) {}
-  document.getElementById('sortCommon').classList.toggle('active', mode === 'common');
-  document.getElementById('sortRare').classList.toggle('active', mode === 'rare');
-  render();
-}
-
-async function openLightbox(animal) {
+let currentLightboxAnimal = null;
+let currentLightboxCategory = null;
+async function openLightbox(animal, categoryName) {
+  currentLightboxAnimal = animal;
+  currentLightboxCategory = categoryName;
   const img = document.getElementById('lightboxImg');
   document.getElementById('lightboxTitle').textContent = animal.name;
   document.getElementById('lightboxLatin').textContent = animal.latin;
-  const dots = Array.from({length: 5}, (_, i) => `<span class="rarity-dot ${i < animal.rarity ? 'filled' : ''}"></span>`).join('');
+  const dots = Array.from({length: 5}, (_, i) => '<span class="rarity-dot ' + (i < animal.rarity ? 'filled' : '') + '"></span>').join('');
   document.getElementById('lightboxRarity').innerHTML = dots;
   document.getElementById('lightboxRarityLabel').textContent = RARITY_LABELS[animal.rarity];
   document.getElementById('lightbox').classList.add('show');
@@ -525,23 +592,200 @@ async function openLightbox(animal) {
   if (cached && cached.thumb) img.src = cached.thumb;
   if (!cached || (!cached.full && !cached.failed)) cached = await fetchAnimalImage(animal);
   if (cached && cached.full) img.src = cached.full;
+  renderPinsList();
 }
-function closeLightbox(e) { if (e && e.target.closest('.lightbox-content') && !e.target.classList.contains('lightbox-close')) return; document.getElementById('lightbox').classList.remove('show'); document.body.style.overflow = ''; }
-async function resetAll() { if (confirm('Alle gespotte dieren wissen?')) { spotted = {}; await saveState(); document.cookie = `${STORAGE_KEY}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`; render(); } }
-function openBackup() { document.getElementById('backupCode').value = btoa(JSON.stringify(spotted)); document.getElementById('backupModal').classList.add('show'); }
+
+function renderPinsList() {
+  if (!currentLightboxAnimal) return;
+  const key = makeKey(currentLightboxCategory, currentLightboxAnimal.name);
+  const animalPins = pins[key] || [];
+  const list = document.getElementById('pinsList');
+  if (animalPins.length === 0) { list.innerHTML = ''; return; }
+  list.innerHTML = animalPins.map((p, i) => {
+    const date = new Date(p.ts);
+    const dateStr = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    return '<div class="pin-item"><span class="pin-when">📍 ' + dateStr + ' · ' + timeStr + '</span><button class="pin-del" onclick="deletePin(\'' + key + '\', ' + i + ')">🗑</button></div>';
+  }).join('');
+}
+async function deletePin(key, index) {
+  if (!pins[key]) return;
+  pins[key].splice(index, 1);
+  if (pins[key].length === 0) delete pins[key];
+  await savePins();
+  renderPinsList();
+  render();
+  showToast('Pin verwijderd');
+}
+function closeLightbox(e) { if (e && e.target.closest('.lightbox-content') && !e.target.classList.contains('lightbox-close')) return; document.getElementById('lightbox').classList.remove('show'); document.body.style.overflow = ''; currentLightboxAnimal = null; currentLightboxCategory = null; }
+
+function ensureMap() {
+  const overlay = document.getElementById('mapOverlay');
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  if (!map) {
+    map = L.map('map', { zoomControl: true, attributionControl: true }).setView(HIGHLANDS_CENTER, HIGHLANDS_ZOOM);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+  } else {
+    setTimeout(() => map.invalidateSize(), 50);
+  }
+  return map;
+}
+function clearMapMarkers() { if (!map) return; map.eachLayer(layer => { if (layer instanceof L.Marker || layer instanceof L.CircleMarker) map.removeLayer(layer); }); }
+
+function makeAnimalIcon(emoji, isHighlight) {
+  const size = isHighlight ? 36 : 30;
+  const bg = isHighlight ? '#b8935a' : '#2d3a2e';
+  const border = isHighlight ? '#d4ad75' : '#b8935a';
+  return L.divIcon({
+    className: 'custom-pin',
+    html: '<div style="width:' + size + 'px;height:' + size + 'px;background:' + bg + ';border:2px solid ' + border + ';border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 8px rgba(0,0,0,0.4);"><span style="transform:rotate(45deg);font-size:' + (size * 0.5) + 'px;">' + emoji + '</span></div>',
+    iconSize: [size, size],
+    iconAnchor: [size/2, size]
+  });
+}
+function getAnimalEmoji(animal, categoryName) { const cat = data.find(c => c.name === categoryName); return cat ? cat.icon : '📍'; }
+
+function openSpotMap() {
+  document.getElementById('mapTitle').textContent = '🗺️ Mijn spot-kaart';
+  document.getElementById('mapSubtitle').textContent = totalPinsCount() + ' locaties in de Highlands';
+  pinningMode = false;
+  currentPinAnimal = null;
+  ensureMap();
+  setTimeout(() => map.invalidateSize(), 100);
+  clearMapMarkers();
+  document.getElementById('mapInstruction').classList.remove('show');
+  
+  const bounds = [];
+  Object.entries(pins).forEach(([key, pinList]) => {
+    const found = findAnimalByKey(key);
+    if (!found) return;
+    const animal = found.animal;
+    const category = found.category;
+    const emoji = getAnimalEmoji(animal, category.name);
+    pinList.forEach(p => {
+      const date = new Date(p.ts);
+      const dateStr = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+      const timeStr = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+      const cached = imageCache[animal.wiki];
+      const imgHtml = cached && cached.thumb ? '<img src="' + cached.thumb + '" class="popup-img" referrerpolicy="no-referrer">' : '';
+      const marker = L.marker([p.lat, p.lng], { icon: makeAnimalIcon(emoji, false) }).addTo(map);
+      marker.bindPopup('<div class="popup-title">' + animal.name + '</div><div class="popup-when">' + dateStr + ' · ' + timeStr + '</div>' + imgHtml);
+      bounds.push([p.lat, p.lng]);
+    });
+  });
+  
+  if (bounds.length > 0) { map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 }); }
+  else { map.setView(HIGHLANDS_CENTER, HIGHLANDS_ZOOM); }
+  document.getElementById('mapToolbar').innerHTML = '<button class="map-tool-btn" onclick="closeMap()">Sluit</button>';
+}
+
+function startPinning() {
+  if (!currentLightboxAnimal || !currentLightboxCategory) return;
+  currentPinAnimal = { animal: currentLightboxAnimal, categoryName: currentLightboxCategory };
+  pinningMode = true;
+  document.getElementById('lightbox').classList.remove('show');
+  document.getElementById('mapTitle').textContent = '📍 ' + currentLightboxAnimal.name;
+  document.getElementById('mapSubtitle').textContent = 'Tik waar je hem zag';
+  ensureMap();
+  setTimeout(() => map.invalidateSize(), 100);
+  clearMapMarkers();
+  
+  const key = makeKey(currentLightboxCategory, currentLightboxAnimal.name);
+  const existing = pins[key] || [];
+  const emoji = getAnimalEmoji(currentLightboxAnimal, currentLightboxCategory);
+  existing.forEach(p => {
+    const date = new Date(p.ts);
+    const dateStr = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const marker = L.marker([p.lat, p.lng], { icon: makeAnimalIcon(emoji, true) }).addTo(map);
+    marker.bindPopup('<div class="popup-title">' + currentLightboxAnimal.name + '</div><div class="popup-when">' + dateStr + ' · ' + timeStr + '</div>');
+  });
+  
+  if (existing.length > 0) { map.fitBounds(existing.map(p => [p.lat, p.lng]), { padding: [60, 60], maxZoom: 15 }); }
+  else { map.setView(HIGHLANDS_CENTER, HIGHLANDS_ZOOM); }
+  
+  document.getElementById('mapInstruction').classList.add('show');
+  document.getElementById('mapToolbar').innerHTML = '<button class="map-tool-btn" onclick="useCurrentLocation()">📍 Mijn locatie</button><button class="map-tool-btn" onclick="closeMap()">Klaar</button>';
+  map.off('click');
+  map.on('click', onMapClickToPin);
+}
+
+async function onMapClickToPin(e) { if (!pinningMode || !currentPinAnimal) return; const lat = e.latlng.lat; const lng = e.latlng.lng; await addPin(lat, lng); }
+async function addPin(lat, lng) {
+  if (!currentPinAnimal) return;
+  const key = makeKey(currentPinAnimal.categoryName, currentPinAnimal.animal.name);
+  if (!pins[key]) pins[key] = [];
+  const ts = Date.now();
+  pins[key].push({ lat, lng, ts });
+  if (!spotted[key]) spotted[key] = ts;
+  await Promise.all([savePins(), saveState()]);
+  const emoji = getAnimalEmoji(currentPinAnimal.animal, currentPinAnimal.categoryName);
+  const date = new Date(ts);
+  const dateStr = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+  const timeStr = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+  const marker = L.marker([lat, lng], { icon: makeAnimalIcon(emoji, true) }).addTo(map);
+  marker.bindPopup('<div class="popup-title">' + currentPinAnimal.animal.name + '</div><div class="popup-when">' + dateStr + ' · ' + timeStr + ' · zojuist</div>').openPopup();
+  if (navigator.vibrate) navigator.vibrate(20);
+  showToast('✓ Gepind: ' + currentPinAnimal.animal.name);
+}
+function useCurrentLocation() {
+  if (!navigator.geolocation) { showToast('GPS niet beschikbaar'); return; }
+  showToast('Locatie ophalen...');
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    map.setView([lat, lng], 16);
+    await addPin(lat, lng);
+  }, (err) => { showToast('GPS-fout: ' + (err.message || 'onbekend')); }, { enableHighAccuracy: true, timeout: 10000 });
+}
+function closeMap() {
+  document.getElementById('mapOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+  document.getElementById('mapInstruction').classList.remove('show');
+  pinningMode = false;
+  currentPinAnimal = null;
+  if (map) map.off('click');
+  render();
+}
+
+async function resetAll() {
+  if (confirm('Alle gespotte dieren én pin-locaties wissen?')) {
+    spotted = {}; pins = {};
+    await Promise.all([saveState(), savePins()]);
+    document.cookie = STORAGE_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie = PINS_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+    render();
+  }
+}
+function openBackup() { document.getElementById('backupCode').value = btoa(JSON.stringify({ s: spotted, p: pins })); document.getElementById('backupModal').classList.add('show'); }
 function closeBackup() { document.getElementById('backupModal').classList.remove('show'); }
 async function copyBackup() { const ta = document.getElementById('backupCode'); ta.select(); try { await navigator.clipboard.writeText(ta.value); showToast('Gekopieerd!'); } catch(e) { document.execCommand('copy'); showToast('Gekopieerd'); } }
-async function restoreBackup() { const code = document.getElementById('backupCode').value.trim(); if (!code) { showToast('Plak eerst een code'); return; } try { const obj = JSON.parse(atob(code)); if (typeof obj !== 'object') throw new Error(); spotted = obj; await saveState(); render(); closeBackup(); showToast(`Hersteld: ${Object.keys(obj).length} vinkjes`); } catch(e) { showToast('Ongeldige code'); } }
+async function restoreBackup() {
+  const code = document.getElementById('backupCode').value.trim();
+  if (!code) { showToast('Plak eerst een code'); return; }
+  try {
+    const obj = JSON.parse(atob(code));
+    if (obj.s && obj.p) { spotted = obj.s; pins = obj.p; }
+    else if (typeof obj === 'object') { spotted = obj; }
+    else throw new Error();
+    await Promise.all([saveState(), savePins()]);
+    render();
+    closeBackup();
+    showToast('Hersteld: ' + Object.keys(spotted).length + ' vinkjes, ' + totalPinsCount() + ' pins');
+  } catch(e) { showToast('Ongeldige code'); }
+}
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
 function clearSearch() { document.getElementById('searchInput').value = ''; searchTerm = ''; document.getElementById('searchClear').classList.remove('show'); applyFilter(); }
 document.getElementById('searchInput').addEventListener('input', (e) => { searchTerm = e.target.value; document.getElementById('searchClear').classList.toggle('show', searchTerm.length > 0); applyFilter(); });
+
 (async () => {
   await openDB();
   await loadState();
   document.getElementById('sortCommon').classList.toggle('active', sortMode === 'common');
   document.getElementById('sortRare').classList.toggle('active', sortMode === 'rare');
   render();
-  loadAllImages();
+  loadAllImages(false);
 })();
 </script>
 </body>
