@@ -28,6 +28,15 @@
   h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 38px; line-height: 1; letter-spacing: -0.01em; color: var(--bone); }
   h1 em { font-style: italic; color: var(--mist); }
   .subtitle { margin-top: 14px; color: var(--mist); opacity: 0.7; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 16px; }
+  .level-badge { margin: 22px auto 0; max-width: 380px; padding: 14px 18px; background: linear-gradient(135deg, rgba(184, 147, 90, 0.12) 0%, rgba(184, 147, 90, 0.04) 100%); border: 1px solid rgba(184, 147, 90, 0.4); border-radius: 4px; position: relative; }
+  .level-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .level-roman { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--gold); line-height: 1; min-width: 40px; text-align: center; }
+  .level-info { flex: 1; text-align: left; }
+  .level-name-nl { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--bone); line-height: 1.1; }
+  .level-name-en { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: var(--mist); opacity: 0.6; margin-top: 2px; }
+  .level-progress-wrap { height: 5px; background: rgba(232, 227, 216, 0.08); border-radius: 3px; overflow: hidden; position: relative; }
+  .level-progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); border-radius: 3px; transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1); box-shadow: 0 0 8px rgba(184, 147, 90, 0.4); }
+  .level-progress-text { font-size: 9px; letter-spacing: 0.2em; color: var(--mist); opacity: 0.6; text-transform: uppercase; margin-top: 8px; text-align: center; font-family: 'Inter', sans-serif; }
   .stats { display: flex; justify-content: center; gap: 24px; margin-top: 20px; font-family: 'Cormorant Garamond', serif; }
   .stat { text-align: center; }
   .stat-num { font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1; }
@@ -121,6 +130,26 @@
   .modal-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ink); padding: 10px 18px; border-radius: 4px; font-size: 12px; letter-spacing: 0.05em; font-weight: 500; z-index: 1300; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
   .toast.show { opacity: 1; }
+  /* Level-up celebration */
+  .levelup-overlay { position: fixed; inset: 0; z-index: 1500; display: none; align-items: center; justify-content: center; pointer-events: none; }
+  .levelup-overlay.show { display: flex; pointer-events: auto; }
+  .levelup-bg { position: absolute; inset: 0; background: rgba(10, 13, 10, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: fadeIn 0.4s ease; }
+  .levelup-card { position: relative; background: linear-gradient(135deg, #2d3a2e 0%, #1a1f1a 100%); border: 2px solid var(--gold); border-radius: 8px; padding: 36px 32px; max-width: 360px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(184, 147, 90, 0.3), 0 20px 40px rgba(0,0,0,0.5); animation: levelupPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes levelupPop { 0% { transform: scale(0.5) rotate(-3deg); opacity: 0; } 60% { transform: scale(1.05) rotate(1deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  .levelup-trophy { font-size: 48px; line-height: 1; margin-bottom: 12px; animation: trophyBounce 1.2s ease-in-out infinite; }
+  @keyframes trophyBounce { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-6px) rotate(-3deg); } }
+  .levelup-eyebrow { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 14px; }
+  .levelup-roman { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 600; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+  .levelup-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--bone); line-height: 1.15; }
+  .levelup-name-en { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--mist); opacity: 0.7; margin-top: 4px; }
+  .levelup-divider { width: 60px; height: 1px; background: var(--gold); opacity: 0.5; margin: 18px auto; }
+  .levelup-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--mist); opacity: 0.85; line-height: 1.4; }
+  .levelup-close { margin-top: 22px; padding: 10px 24px; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
+  .levelup-close:active { background: rgba(184, 147, 90, 0.15); }
+  /* Confetti particles */
+  .confetti { position: absolute; width: 8px; height: 8px; opacity: 0; pointer-events: none; }
+  .confetti.go { animation: confettiFall 2.5s cubic-bezier(0.5, 0, 0.5, 1) forwards; }
+  @keyframes confettiFall { 0% { opacity: 0; transform: translate(0, -20vh) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx, 0), 110vh) rotate(720deg); } }
   .map-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 1200; display: none; flex-direction: column; }
   .map-overlay.show { display: flex; }
   .map-header { padding: max(16px, env(safe-area-inset-top)) 20px 16px; display: flex; align-items: center; gap: 12px; background: linear-gradient(180deg, rgba(26,31,26,0.95) 0%, rgba(26,31,26,0.8) 100%); position: relative; z-index: 5; border-bottom: 1px solid rgba(232,227,216,0.08); }
@@ -141,7 +170,7 @@
   .popup-when { font-size: 11px; color: var(--mist); opacity: 0.8; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px; }
   .popup-img { width: 60px; height: 60px; object-fit: cover; border-radius: 3px; margin-top: 6px; }
   .leaflet-container a.leaflet-popup-close-button { color: var(--bone); }
-  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } .crest { width: 150px; } }
+  @media (max-width: 380px) { h1 { font-size: 32px; } .animal-img-wrap { width: 56px; height: 56px; } .crest { width: 150px; } .levelup-roman { font-size: 48px; } .levelup-name { font-size: 22px; } }
 </style>
 </head>
 <body>
@@ -152,6 +181,19 @@
     <h1>Highlands<br><em>Wildlife Spotter</em></h1>
     <div class="subtitle">a journal of creatures of the Scottish wilds</div>
     <div class="ornament">· ❦ ·</div>
+    <div class="level-badge" id="levelBadge">
+      <div class="level-row">
+        <div class="level-roman" id="levelRoman">I</div>
+        <div class="level-info">
+          <div class="level-name-nl" id="levelNameNl">Wandelaar van de Heide</div>
+          <div class="level-name-en" id="levelNameEn">Heath Wanderer</div>
+        </div>
+      </div>
+      <div class="level-progress-wrap">
+        <div class="level-progress-bar" id="levelProgressBar" style="width: 0%"></div>
+      </div>
+      <div class="level-progress-text" id="levelProgressText">0 / 10 dieren naar volgende rang</div>
+    </div>
     <div class="stats">
       <div class="stat"><div class="stat-num" id="totalSpotted">0</div><div class="stat-label">Gespot</div></div>
       <div class="stat"><div class="stat-num" id="totalAnimals">0</div><div class="stat-label">Totaal</div></div>
@@ -224,6 +266,21 @@
     </div>
   </div>
 </div>
+
+<div class="levelup-overlay" id="levelupOverlay">
+  <div class="levelup-bg"></div>
+  <div class="levelup-card">
+    <div class="levelup-trophy" id="levelupTrophy">🏆</div>
+    <div class="levelup-eyebrow">Nieuwe rang behaald</div>
+    <div class="levelup-roman" id="levelupRoman">II</div>
+    <div class="levelup-name" id="levelupName">Veldwachter</div>
+    <div class="levelup-name-en" id="levelupNameEn">Field Watcher</div>
+    <div class="levelup-divider"></div>
+    <div class="levelup-tagline" id="levelupTagline">Tien dieren in je veldgids — een waardige stap.</div>
+    <button class="levelup-close" onclick="closeLevelUp()">Verder spotten</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -417,10 +474,89 @@ const data = [
 ];
 
 const RARITY_LABELS = ['', 'Zeer algemeen', 'Algemeen', 'Soms', 'Zeldzaam', 'Zeer zeldzaam'];
+
+// === LEVEL SYSTEEM ===
+const LEVELS = [
+  { roman: 'I',    nl: 'Wandelaar van de Heide',    en: 'Heath Wanderer',    trophy: '🥾', tagline: 'De eerste stappen op het pad. Het avontuur begint.' },
+  { roman: 'II',   nl: 'Veldwachter',                en: 'Field Watcher',     trophy: '👁️', tagline: 'Tien dieren in je veldgids — een waardige stap.' },
+  { roman: 'III',  nl: 'Verkenner van de Glen',      en: 'Glen Scout',        trophy: '🧭', tagline: 'De valleien beginnen hun geheimen prijs te geven.' },
+  { roman: 'IV',   nl: 'Volger van Sporen',          en: 'Tracker of Tracks', trophy: '🐾', tagline: 'Pootafdrukken, veren, geluiden — niets ontgaat je.' },
+  { roman: 'V',    nl: 'Bosfluisteraar',             en: 'Forest Whisperer',  trophy: '🌲', tagline: 'De bossen kennen je naam. De dieren komen dichterbij.' },
+  { roman: 'VI',   nl: 'Hertenkenner',               en: 'Stag Reader',       trophy: '🦌', tagline: 'Je leest het gewei als een boek, en de wind als een kaart.' },
+  { roman: 'VII',  nl: 'Meester van de Munro',       en: 'Munro Master',      trophy: '⛰️', tagline: 'Hoog op de heuvels, waar weinigen komen — daar ben jij thuis.' },
+  { roman: 'VIII', nl: 'Adelaarsoog',                en: 'Eagle Eye',         trophy: '🦅', tagline: 'Je blik mist niets. Zelfs de zeldzaamste vleugel verraadt zich.' },
+  { roman: 'IX',   nl: 'Hooglandhoeder',             en: 'Highland Warden',   trophy: '🛡️', tagline: 'De wildernis erkent je als beschermer. Een eer onder weinigen.' },
+  { roman: 'X',    nl: 'Laird van de Wildernis',     en: 'Laird of the Wild', trophy: '👑', tagline: 'Heerser onder de wolken. De Highlands zijn jouw rijk.' },
+];
+
+function getLevelForCount(count) {
+  // Level 1 = 0-9 dieren, level 2 = 10-19, ... level 10 = 90+
+  const idx = Math.min(Math.floor(count / 10), LEVELS.length - 1);
+  return { index: idx, level: LEVELS[idx] };
+}
+
+function updateLevelBadge(spottedCount) {
+  const { index, level } = getLevelForCount(spottedCount);
+  document.getElementById('levelRoman').textContent = level.roman;
+  document.getElementById('levelNameNl').textContent = level.nl;
+  document.getElementById('levelNameEn').textContent = level.en;
+  
+  if (index >= LEVELS.length - 1) {
+    // Max level bereikt
+    document.getElementById('levelProgressBar').style.width = '100%';
+    document.getElementById('levelProgressText').textContent = '✦ Hoogste rang behaald ✦';
+  } else {
+    const inLevel = spottedCount - (index * 10);
+    const pct = (inLevel / 10) * 100;
+    document.getElementById('levelProgressBar').style.width = pct + '%';
+    const remaining = 10 - inLevel;
+    document.getElementById('levelProgressText').textContent = inLevel + ' / 10 dieren naar volgende rang';
+  }
+}
+
+function showLevelUp(newIndex) {
+  const level = LEVELS[newIndex];
+  document.getElementById('levelupTrophy').textContent = level.trophy;
+  document.getElementById('levelupRoman').textContent = level.roman;
+  document.getElementById('levelupName').textContent = level.nl;
+  document.getElementById('levelupNameEn').textContent = level.en;
+  document.getElementById('levelupTagline').textContent = level.tagline;
+  document.getElementById('levelupOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  if (navigator.vibrate) navigator.vibrate([30, 60, 30, 60, 80]);
+  spawnConfetti();
+}
+
+function spawnConfetti() {
+  const overlay = document.getElementById('levelupOverlay');
+  const colors = ['#b8935a', '#d4ad75', '#6b4e6f', '#e8e3d8', '#8b4a32'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    const startX = Math.random() * 100;
+    const dx = (Math.random() - 0.5) * 200;
+    c.style.left = startX + 'vw';
+    c.style.top = '-2vh';
+    c.style.background = colors[i % colors.length];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.setProperty('--dx', dx + 'px');
+    c.style.animationDelay = (Math.random() * 0.6) + 's';
+    overlay.appendChild(c);
+    requestAnimationFrame(() => c.classList.add('go'));
+    setTimeout(() => c.remove(), 3500);
+  }
+}
+
+function closeLevelUp() {
+  document.getElementById('levelupOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
 const STORAGE_KEY = 'highlands-spotted-v2';
 const PINS_KEY = 'highlands-pins-v1';
 const IMAGE_CACHE_KEY = 'highlands-images-v4';
 const SORT_KEY = 'highlands-sort';
+const LEVEL_KEY = 'highlands-last-level';
 const HIGHLANDS_CENTER = [57.0, -4.5];
 const HIGHLANDS_ZOOM = 8;
 
@@ -433,6 +569,7 @@ let sortMode = 'common';
 let map = null;
 let currentPinAnimal = null;
 let pinningMode = false;
+let lastLevelIndex = 0;
 
 function openDB() { return new Promise((resolve) => { try { const req = indexedDB.open('highlands-spotter', 1); req.onupgradeneeded = (e) => { const d = e.target.result; if (!d.objectStoreNames.contains('state')) d.createObjectStore('state'); }; req.onsuccess = (e) => { db = e.target.result; resolve(db); }; req.onerror = () => resolve(null); } catch(e) { resolve(null); } }); }
 async function dbGet(key) { if (!db) return null; return new Promise((r) => { try { const tx = db.transaction('state', 'readonly'); const req = tx.objectStore('state').get(key); req.onsuccess = () => r(req.result); req.onerror = () => r(null); } catch(e) { r(null); } }); }
@@ -461,10 +598,28 @@ async function loadState() {
     try { const ls = localStorage.getItem(IMAGE_CACHE_KEY); if (ls) imageCache = JSON.parse(ls); } catch(e) { imageCache = {}; }
   }
   try { const s = localStorage.getItem(SORT_KEY); if (s === 'rare' || s === 'common') sortMode = s; } catch(e) {}
+  
+  // Load level state
+  try { const stored = localStorage.getItem(LEVEL_KEY); if (stored !== null) lastLevelIndex = parseInt(stored, 10) || 0; } catch(e) {}
+  // Initialize lastLevelIndex op huidige level (zonder level-up popup voor bestaande voortgang)
+  const currentLevelIdx = getLevelForCount(Object.keys(spotted).length).index;
+  if (lastLevelIndex < currentLevelIdx) lastLevelIndex = currentLevelIdx;
 }
 async function saveState() { const json = JSON.stringify(spotted); try { localStorage.setItem(STORAGE_KEY, json); } catch(e) {} setCookie(STORAGE_KEY, json); await dbSet(STORAGE_KEY, json); }
 async function savePins() { const json = JSON.stringify(pins); try { localStorage.setItem(PINS_KEY, json); } catch(e) {} await dbSet(PINS_KEY, json); }
 async function saveImageCache() { const json = JSON.stringify(imageCache); try { localStorage.setItem(IMAGE_CACHE_KEY, json); } catch(e) {} await dbSet(IMAGE_CACHE_KEY, json); }
+function saveLastLevel() { try { localStorage.setItem(LEVEL_KEY, String(lastLevelIndex)); } catch(e) {} }
+
+// Check voor level-up na elke verandering in spotted-count
+function checkForLevelUp() {
+  const count = Object.keys(spotted).length;
+  const newLevelIdx = getLevelForCount(count).index;
+  if (newLevelIdx > lastLevelIndex) {
+    lastLevelIndex = newLevelIdx;
+    saveLastLevel();
+    setTimeout(() => showLevelUp(newLevelIdx), 350);
+  }
+}
 
 async function fetchImageStrategy1(wikiPage) { try { const url = 'https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(wikiPage); const r = await fetch(url, { headers: { 'Accept': 'application/json' } }); if (!r.ok) return null; const j = await r.json(); if (j.thumbnail && j.thumbnail.source) return { thumb: j.thumbnail.source, full: (j.originalimage && j.originalimage.source) || j.thumbnail.source }; } catch(e) {} return null; }
 async function fetchImageStrategy2(searchTerm) { try { const searchUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail|original&pithumbsize=400&generator=search&gsrsearch=' + encodeURIComponent(searchTerm) + '&gsrlimit=1&origin=*'; const r = await fetch(searchUrl); if (!r.ok) return null; const j = await r.json(); const pages = j.query && j.query.pages; if (!pages) return null; const page = Object.values(pages)[0]; if (page && page.thumbnail && page.thumbnail.source) return { thumb: page.thumbnail.source, full: (page.original && page.original.source) || page.thumbnail.source }; } catch(e) {} return null; }
@@ -533,7 +688,15 @@ function render() {
           '</button>' +
           '<div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg></div>' +
         '</div>';
-      const toggleSpot = async (e) => { e.stopPropagation(); if (spotted[key]) delete spotted[key]; else { spotted[key] = Date.now(); if (navigator.vibrate) navigator.vibrate(15); } await saveState(); render(); applyFilter(); };
+      const toggleSpot = async (e) => {
+        e.stopPropagation();
+        if (spotted[key]) delete spotted[key];
+        else { spotted[key] = Date.now(); if (navigator.vibrate) navigator.vibrate(15); }
+        await saveState();
+        render();
+        applyFilter();
+        checkForLevelUp();
+      };
       el.querySelector('.animal-info').addEventListener('click', toggleSpot);
       el.querySelector('.check').addEventListener('click', toggleSpot);
       el.querySelector('.animal-img-wrap').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(animal, cat.name); });
@@ -545,19 +708,14 @@ function render() {
   document.getElementById('totalSpotted').textContent = totalSpotted;
   document.getElementById('totalAnimals').textContent = totalAnimals;
   document.getElementById('totalPins').textContent = totalPinsCount();
+  updateLevelBadge(totalSpotted);
   applyFilter();
 }
 
-// === QUICK PIN: lees GPS, pin meteen, vink af, alles in 1 stap ===
 async function quickPinAtCurrentLocation(animal, categoryName, buttonEl) {
-  if (!navigator.geolocation) {
-    showToast('GPS niet beschikbaar op dit toestel');
-    return;
-  }
-  // Visual feedback: pulse loading state
+  if (!navigator.geolocation) { showToast('GPS niet beschikbaar op dit toestel'); return; }
   if (buttonEl) buttonEl.classList.add('loading');
   showToast('📡 Locatie ophalen...');
-  
   navigator.geolocation.getCurrentPosition(async (pos) => {
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
@@ -571,6 +729,7 @@ async function quickPinAtCurrentLocation(animal, categoryName, buttonEl) {
     if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
     showToast('✓ ' + animal.name + ' gepind op je locatie!');
     render();
+    checkForLevelUp();
   }, (err) => {
     if (buttonEl) buttonEl.classList.remove('loading');
     let msg = 'GPS-fout';
@@ -584,7 +743,6 @@ async function quickPinAtCurrentLocation(animal, categoryName, buttonEl) {
 async function quickPinFromLightbox() {
   if (!currentLightboxAnimal || !currentLightboxCategory) return;
   await quickPinAtCurrentLocation(currentLightboxAnimal, currentLightboxCategory, null);
-  // Refresh pinslijst in de lightbox
   renderPinsList();
 }
 
@@ -787,6 +945,7 @@ async function addPin(lat, lng) {
   marker.bindPopup('<div class="popup-title">' + currentPinAnimal.animal.name + '</div><div class="popup-when">' + dateStr + ' · ' + timeStr + ' · zojuist</div>').openPopup();
   if (navigator.vibrate) navigator.vibrate(20);
   showToast('✓ Gepind: ' + currentPinAnimal.animal.name);
+  checkForLevelUp();
 }
 function useCurrentLocation() {
   if (!navigator.geolocation) { showToast('GPS niet beschikbaar'); return; }
@@ -809,15 +968,16 @@ function closeMap() {
 }
 
 async function resetAll() {
-  if (confirm('Alle gespotte dieren én pin-locaties wissen?')) {
-    spotted = {}; pins = {};
+  if (confirm('Alle gespotte dieren én pin-locaties én levels wissen?')) {
+    spotted = {}; pins = {}; lastLevelIndex = 0;
+    saveLastLevel();
     await Promise.all([saveState(), savePins()]);
     document.cookie = STORAGE_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     document.cookie = PINS_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     render();
   }
 }
-function openBackup() { document.getElementById('backupCode').value = btoa(JSON.stringify({ s: spotted, p: pins })); document.getElementById('backupModal').classList.add('show'); }
+function openBackup() { document.getElementById('backupCode').value = btoa(JSON.stringify({ s: spotted, p: pins, l: lastLevelIndex })); document.getElementById('backupModal').classList.add('show'); }
 function closeBackup() { document.getElementById('backupModal').classList.remove('show'); }
 async function copyBackup() { const ta = document.getElementById('backupCode'); ta.select(); try { await navigator.clipboard.writeText(ta.value); showToast('Gekopieerd!'); } catch(e) { document.execCommand('copy'); showToast('Gekopieerd'); } }
 async function restoreBackup() {
@@ -825,10 +985,11 @@ async function restoreBackup() {
   if (!code) { showToast('Plak eerst een code'); return; }
   try {
     const obj = JSON.parse(atob(code));
-    if (obj.s && obj.p) { spotted = obj.s; pins = obj.p; }
+    if (obj.s) { spotted = obj.s; pins = obj.p || {}; if (typeof obj.l === 'number') lastLevelIndex = obj.l; }
     else if (typeof obj === 'object') { spotted = obj; }
     else throw new Error();
     await Promise.all([saveState(), savePins()]);
+    saveLastLevel();
     render();
     closeBackup();
     showToast('Hersteld: ' + Object.keys(spotted).length + ' vinkjes, ' + totalPinsCount() + ' pins');
