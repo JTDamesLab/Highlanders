@@ -28,13 +28,13 @@
   h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 38px; line-height: 1; letter-spacing: -0.01em; color: var(--bone); }
   h1 em { font-style: italic; color: var(--mist); }
   .subtitle { margin-top: 14px; color: var(--mist); opacity: 0.7; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 16px; }
-  .level-badge { margin: 22px auto 0; max-width: 380px; padding: 14px 18px; background: linear-gradient(135deg, rgba(184, 147, 90, 0.12) 0%, rgba(184, 147, 90, 0.04) 100%); border: 1px solid rgba(184, 147, 90, 0.4); border-radius: 4px; position: relative; }
+  .level-badge { margin: 22px auto 0; max-width: 380px; padding: 14px 18px; background: linear-gradient(135deg, rgba(184, 147, 90, 0.12) 0%, rgba(184, 147, 90, 0.04) 100%); border: 1px solid rgba(184, 147, 90, 0.4); border-radius: 4px; }
   .level-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
   .level-roman { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--gold); line-height: 1; min-width: 40px; text-align: center; }
   .level-info { flex: 1; text-align: left; }
   .level-name-nl { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--bone); line-height: 1.1; }
   .level-name-en { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: var(--mist); opacity: 0.6; margin-top: 2px; }
-  .level-progress-wrap { height: 5px; background: rgba(232, 227, 216, 0.08); border-radius: 3px; overflow: hidden; position: relative; }
+  .level-progress-wrap { height: 5px; background: rgba(232, 227, 216, 0.08); border-radius: 3px; overflow: hidden; }
   .level-progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); border-radius: 3px; transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1); box-shadow: 0 0 8px rgba(184, 147, 90, 0.4); }
   .level-progress-text { font-size: 9px; letter-spacing: 0.2em; color: var(--mist); opacity: 0.6; text-transform: uppercase; margin-top: 8px; text-align: center; font-family: 'Inter', sans-serif; }
   .stats { display: flex; justify-content: center; gap: 24px; margin-top: 20px; font-family: 'Cormorant Garamond', serif; }
@@ -55,7 +55,6 @@
   .search-clear.show { display: flex; align-items: center; justify-content: center; }
   .controls-row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   .sort-toggle { display: flex; gap: 6px; align-items: center; flex: 1; min-width: 0; }
-  .sort-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); opacity: 0.5; margin-right: 4px; }
   .sort-btn { padding: 6px 10px; background: transparent; border: 1px solid rgba(232, 227, 216, 0.15); color: var(--mist); font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(184, 147, 90, 0.08); }
   .expand-all-btn { padding: 6px 10px; background: transparent; border: 1px solid rgba(232, 227, 216, 0.15); color: var(--mist); font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; cursor: pointer; white-space: nowrap; }
@@ -94,6 +93,7 @@
   .animal-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--bone); line-height: 1.2; transition: color 0.3s ease; }
   .animal.spotted .animal-name { color: var(--gold); }
   .animal-latin { font-style: italic; color: var(--mist); opacity: 0.55; margin-top: 2px; font-family: 'Cormorant Garamond', serif; font-size: 13px; }
+  .animal-gaelic { font-style: italic; color: var(--gold); opacity: 0.7; margin-top: 1px; font-family: 'Cormorant Garamond', serif; font-size: 12px; }
   .rarity { display: flex; gap: 2px; margin-top: 6px; align-items: center; }
   .rarity-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--mist); opacity: 0.2; }
   .rarity-dot.filled { opacity: 0.7; background: var(--gold); }
@@ -124,7 +124,8 @@
   @keyframes zoomIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   .lightbox-caption { text-align: center; color: var(--bone); max-width: 480px; }
   .lightbox-caption h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; margin-bottom: 4px; }
-  .lightbox-caption .latin { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--mist); opacity: 0.7; font-size: 17px; margin-bottom: 14px; }
+  .lightbox-caption .latin { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--mist); opacity: 0.7; font-size: 17px; }
+  .lightbox-caption .gaelic { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold); opacity: 0.85; font-size: 16px; margin-top: 4px; margin-bottom: 14px; }
   .lightbox-caption .rarity-large { display: flex; gap: 5px; justify-content: center; margin-top: 8px; }
   .lightbox-caption .rarity-large .rarity-dot { width: 7px; height: 7px; }
   .lightbox-caption .rarity-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); opacity: 0.5; margin-top: 14px; }
@@ -154,7 +155,7 @@
   .levelup-eyebrow { font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 14px; }
   .levelup-roman { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 600; color: var(--gold); line-height: 1; margin-bottom: 8px; }
   .levelup-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--bone); line-height: 1.15; }
-  .levelup-name-en { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--mist); opacity: 0.7; margin-top: 4px; }
+  .levelup-name-en { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--gold); opacity: 0.85; margin-top: 4px; }
   .levelup-divider { width: 60px; height: 1px; background: var(--gold); opacity: 0.5; margin: 18px auto; }
   .levelup-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--mist); opacity: 0.85; line-height: 1.4; }
   .levelup-close { margin-top: 22px; padding: 10px 24px; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
@@ -198,13 +199,13 @@
         <div class="level-roman" id="levelRoman">I</div>
         <div class="level-info">
           <div class="level-name-nl" id="levelNameNl">Wandelaar van de Heide</div>
-          <div class="level-name-en" id="levelNameEn">Heath Wanderer</div>
+          <div class="level-name-en" id="levelNameEn">Coisiche an Fhraoich</div>
         </div>
       </div>
       <div class="level-progress-wrap">
         <div class="level-progress-bar" id="levelProgressBar" style="width: 0%"></div>
       </div>
-      <div class="level-progress-text" id="levelProgressText">0 / 10 dieren naar volgende rang</div>
+      <div class="level-progress-text" id="levelProgressText">0 / 13 dieren naar volgende rang</div>
     </div>
     <div class="stats">
       <div class="stat"><div class="stat-num" id="totalSpotted">0</div><div class="stat-label">Gespot</div></div>
@@ -244,6 +245,7 @@
     <div class="lightbox-caption">
       <h3 id="lightboxTitle"></h3>
       <div class="latin" id="lightboxLatin"></div>
+      <div class="gaelic" id="lightboxGaelic"></div>
       <div class="rarity-large" id="lightboxRarity"></div>
       <div class="rarity-label" id="lightboxRarityLabel"></div>
       <div class="lightbox-actions">
@@ -287,10 +289,10 @@
     <div class="levelup-trophy" id="levelupTrophy">🏆</div>
     <div class="levelup-eyebrow">Nieuwe rang behaald</div>
     <div class="levelup-roman" id="levelupRoman">II</div>
-    <div class="levelup-name" id="levelupName">Veldwachter</div>
-    <div class="levelup-name-en" id="levelupNameEn">Field Watcher</div>
+    <div class="levelup-name" id="levelupName">Verkenner van de Glen</div>
+    <div class="levelup-name-en" id="levelupNameEn">Rabhadair na Glinne</div>
     <div class="levelup-divider"></div>
-    <div class="levelup-tagline" id="levelupTagline">Tien dieren in je veldgids — een waardige stap.</div>
+    <div class="levelup-tagline" id="levelupTagline">De valleien beginnen hun geheimen prijs te geven.</div>
     <button class="levelup-close" onclick="closeLevelUp()">Verder spotten</button>
   </div>
 </div>
@@ -298,227 +300,147 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// 75 dieren — strikt geselecteerd op realistische zichtbaarheid in de Schotse Hooglanden
+// Elke soort heeft zijn Schots-Gaelic naam
 const data = [
-  { name: 'Boerderijdieren', icon: '🐓', animals: [
-    { name: 'Schaap', latin: 'Ovis aries', rarity: 1, wiki: 'Sheep' },
-    { name: 'Highland koe', latin: 'Bos taurus', rarity: 1, wiki: 'Highland_cattle' },
-    { name: 'Koe (Holstein)', latin: 'Bos taurus', rarity: 1, wiki: 'Holstein_Friesian_cattle' },
-    { name: 'Paard', latin: 'Equus caballus', rarity: 1, wiki: 'Horse' },
-    { name: 'Highland pony', latin: 'Equus caballus', rarity: 2, wiki: 'Highland_pony' },
-    { name: 'Shetland pony', latin: 'Equus caballus', rarity: 3, wiki: 'Shetland_pony' },
-    { name: 'Geit (boerderij)', latin: 'Capra hircus', rarity: 2, wiki: 'Goat' },
-    { name: 'Wilde / verwilderde geit', latin: 'Capra hircus', rarity: 3, wiki: 'Feral_goat' },
-    { name: 'Ezel', latin: 'Equus asinus', rarity: 3, wiki: 'Donkey' },
-    { name: 'Kip', latin: 'Gallus gallus domesticus', rarity: 1, wiki: 'Chicken' },
-    { name: 'Haan', latin: 'Gallus gallus domesticus', rarity: 2, wiki: 'Rooster' },
-    { name: 'Eend (boerderij)', latin: 'Anas platyrhynchos domesticus', rarity: 1, wiki: 'Domestic_duck' },
-    { name: 'Gans', latin: 'Anser anser', rarity: 2, wiki: 'Greylag_goose' },
-    { name: 'Border collie', latin: 'Canis familiaris', rarity: 1, wiki: 'Border_Collie' },
+  { name: 'Boerderijdieren & vee', icon: '🐄', animals: [
+    { name: 'Schaap', latin: 'Ovis aries', gaelic: 'Caora', rarity: 1, wiki: 'Sheep' },
+    { name: 'Highland koe', latin: 'Bos taurus', gaelic: 'Bò Ghàidhealach', rarity: 1, wiki: 'Highland_cattle' },
+    { name: 'Zwartbonte koe (Holstein)', latin: 'Bos taurus', gaelic: 'Bò dhubh is gheal', rarity: 1, wiki: 'Holstein_Friesian_cattle' },
+    { name: 'Aberdeen Angus (zwart)', latin: 'Bos taurus', gaelic: 'Bò dhubh', rarity: 2, wiki: 'Aberdeen_Angus' },
+    { name: 'Paard', latin: 'Equus caballus', gaelic: 'Each', rarity: 1, wiki: 'Horse' },
+    { name: 'Highland pony', latin: 'Equus caballus', gaelic: 'Each Gàidhealach', rarity: 2, wiki: 'Highland_pony' },
+    { name: 'Shetland pony', latin: 'Equus caballus', gaelic: 'Each Sealtainneach', rarity: 3, wiki: 'Shetland_pony' },
+    { name: 'Geit', latin: 'Capra hircus', gaelic: 'Gobhar', rarity: 2, wiki: 'Goat' },
+    { name: 'Verwilderde geit', latin: 'Capra hircus', gaelic: 'Gobhar fhiadhaich', rarity: 3, wiki: 'Feral_goat' },
+    { name: 'Border collie', latin: 'Canis familiaris', gaelic: 'Cù-chaorach', rarity: 1, wiki: 'Border_Collie' },
+    { name: 'Kip & haan', latin: 'Gallus gallus domesticus', gaelic: 'Cearc is coileach', rarity: 1, wiki: 'Chicken' },
   ]},
   { name: 'Wilde zoogdieren', icon: '🦌', animals: [
-    { name: 'Konijn', latin: 'Oryctolagus cuniculus', rarity: 1, wiki: 'European_rabbit' },
-    { name: 'Eekhoorn (grijs)', latin: 'Sciurus carolinensis', rarity: 2, wiki: 'Eastern_gray_squirrel' },
-    { name: 'Edelhert', latin: 'Cervus elaphus', rarity: 2, wiki: 'Red_deer' },
-    { name: 'Ree', latin: 'Capreolus capreolus', rarity: 2, wiki: 'Roe_deer' },
-    { name: 'Mol', latin: 'Talpa europaea', rarity: 2, wiki: 'European_mole' },
-    { name: 'Bruine haas', latin: 'Lepus europaeus', rarity: 2, wiki: 'European_hare' },
-    { name: 'Vos', latin: 'Vulpes vulpes', rarity: 3, wiki: 'Red_fox' },
-    { name: 'Rode eekhoorn', latin: 'Sciurus vulgaris', rarity: 3, wiki: 'Red_squirrel' },
-    { name: 'Sikahert', latin: 'Cervus nippon', rarity: 3, wiki: 'Sika_deer' },
-    { name: 'Damhert', latin: 'Dama dama', rarity: 3, wiki: 'Fallow_deer' },
-    { name: 'Wezel', latin: 'Mustela nivalis', rarity: 3, wiki: 'Least_weasel' },
-    { name: 'Berghaas', latin: 'Lepus timidus', rarity: 3, wiki: 'Mountain_hare' },
-    { name: 'Hermelijn', latin: 'Mustela erminea', rarity: 4, wiki: 'Stoat' },
-    { name: 'Das', latin: 'Meles meles', rarity: 4, wiki: 'European_badger' },
-    { name: 'Otter', latin: 'Lutra lutra', rarity: 4, wiki: 'Eurasian_otter' },
-    { name: 'Rendier (Cairngorms)', latin: 'Rangifer tarandus', rarity: 5, wiki: 'Reindeer' },
-    { name: 'Boommarter', latin: 'Martes martes', rarity: 5, wiki: 'European_pine_marten' },
-    { name: 'Schotse wilde kat', latin: 'Felis silvestris', rarity: 5, wiki: 'Scottish_wildcat' },
+    { name: 'Konijn', latin: 'Oryctolagus cuniculus', gaelic: 'Coineanach', rarity: 1, wiki: 'European_rabbit' },
+    { name: 'Edelhert', latin: 'Cervus elaphus', gaelic: 'Fiadh ruadh', rarity: 1, wiki: 'Red_deer' },
+    { name: 'Ree', latin: 'Capreolus capreolus', gaelic: 'Earb', rarity: 2, wiki: 'Roe_deer' },
+    { name: 'Vos', latin: 'Vulpes vulpes', gaelic: 'Sionnach / Madadh-ruadh', rarity: 2, wiki: 'Red_fox' },
+    { name: 'Rode eekhoorn', latin: 'Sciurus vulgaris', gaelic: 'Feòrag ruadh', rarity: 2, wiki: 'Red_squirrel' },
+    { name: 'Grijze eekhoorn', latin: 'Sciurus carolinensis', gaelic: 'Feòrag ghlas', rarity: 2, wiki: 'Eastern_gray_squirrel' },
+    { name: 'Bergha as', latin: 'Lepus timidus', gaelic: 'Maigheach-bhàn', rarity: 3, wiki: 'Mountain_hare' },
+    { name: 'Bruine haas', latin: 'Lepus europaeus', gaelic: 'Maigheach', rarity: 3, wiki: 'European_hare' },
+    { name: 'Mol (heuveltjes)', latin: 'Talpa europaea', gaelic: 'Famh', rarity: 2, wiki: 'European_mole' },
+    { name: 'Egel', latin: 'Erinaceus europaeus', gaelic: 'Gràineag', rarity: 3, wiki: 'European_hedgehog' },
+    { name: 'Otter', latin: 'Lutra lutra', gaelic: 'Dòbhran / Biast-dhubh', rarity: 4, wiki: 'Eurasian_otter' },
+    { name: 'Das', latin: 'Meles meles', gaelic: 'Broc', rarity: 4, wiki: 'European_badger' },
+    { name: 'Boommarter', latin: 'Martes martes', gaelic: 'Taghan', rarity: 4, wiki: 'European_pine_marten' },
+    { name: 'Rendier (Cairngorms)', latin: 'Rangifer tarandus', gaelic: 'Fiadh-Lochlannach', rarity: 4, wiki: 'Reindeer' },
+    { name: 'Schotse wilde kat', latin: 'Felis silvestris', gaelic: 'Cat fiadhaich', rarity: 5, wiki: 'Scottish_wildcat' },
   ]},
-  { name: 'Roofvogels', icon: '🦅', animals: [
-    { name: 'Buizerd', latin: 'Buteo buteo', rarity: 1, wiki: 'Common_buzzard' },
-    { name: 'Torenvalk', latin: 'Falco tinnunculus', rarity: 2, wiki: 'Common_kestrel' },
-    { name: 'Sperwer', latin: 'Accipiter nisus', rarity: 3, wiki: 'Eurasian_sparrowhawk' },
-    { name: 'Bruine kiekendief', latin: 'Circus aeruginosus', rarity: 4, wiki: 'Western_marsh_harrier' },
-    { name: 'Blauwe kiekendief', latin: 'Circus cyaneus', rarity: 4, wiki: 'Hen_harrier' },
-    { name: 'Visarend', latin: 'Pandion haliaetus', rarity: 4, wiki: 'Osprey' },
-    { name: 'Slechtvalk', latin: 'Falco peregrinus', rarity: 4, wiki: 'Peregrine_falcon' },
-    { name: 'Smelleken', latin: 'Falco columbarius', rarity: 4, wiki: 'Merlin_(bird)' },
-    { name: 'Rode wouw', latin: 'Milvus milvus', rarity: 4, wiki: 'Red_kite' },
-    { name: 'Steenarend', latin: 'Aquila chrysaetos', rarity: 5, wiki: 'Golden_eagle' },
-    { name: 'Zeearend', latin: 'Haliaeetus albicilla', rarity: 5, wiki: 'White-tailed_eagle' },
-    { name: 'Velduil', latin: 'Asio flammeus', rarity: 5, wiki: 'Short-eared_owl' },
-    { name: 'Kerkuil', latin: 'Tyto alba', rarity: 4, wiki: 'Western_barn_owl' },
-    { name: 'Bosuil', latin: 'Strix aluco', rarity: 4, wiki: 'Tawny_owl' },
+  { name: 'Roofvogels & uilen', icon: '🦅', animals: [
+    { name: 'Buizerd', latin: 'Buteo buteo', gaelic: 'Clamhan', rarity: 1, wiki: 'Common_buzzard' },
+    { name: 'Torenvalk', latin: 'Falco tinnunculus', gaelic: 'Clamhan-ruadh', rarity: 2, wiki: 'Common_kestrel' },
+    { name: 'Sperwer', latin: 'Accipiter nisus', gaelic: 'Speireag', rarity: 3, wiki: 'Eurasian_sparrowhawk' },
+    { name: 'Rode wouw', latin: 'Milvus milvus', gaelic: 'Clamhan-gobhlach', rarity: 3, wiki: 'Red_kite' },
+    { name: 'Visarend', latin: 'Pandion haliaetus', gaelic: 'Iolair-iasgaich', rarity: 4, wiki: 'Osprey' },
+    { name: 'Steenarend', latin: 'Aquila chrysaetos', gaelic: 'Iolaire-bhuidhe', rarity: 4, wiki: 'Golden_eagle' },
+    { name: 'Zeearend', latin: 'Haliaeetus albicilla', gaelic: 'Iolaire-mhara', rarity: 4, wiki: 'White-tailed_eagle' },
+    { name: 'Bosuil', latin: 'Strix aluco', gaelic: 'Cailleach-oidhche', rarity: 3, wiki: 'Tawny_owl' },
+    { name: 'Kerkuil', latin: 'Tyto alba', gaelic: 'Comhachag-bhàn', rarity: 4, wiki: 'Western_barn_owl' },
   ]},
   { name: 'Hoenders', icon: '🐔', animals: [
-    { name: 'Fazant', latin: 'Phasianus colchicus', rarity: 2, wiki: 'Common_pheasant' },
-    { name: 'Schots moerassneeuwhoen', latin: 'Lagopus lagopus scotica', rarity: 3, wiki: 'Red_grouse' },
-    { name: 'Korhoen', latin: 'Lyrurus tetrix', rarity: 4, wiki: 'Black_grouse' },
-    { name: 'Alpensneeuwhoen', latin: 'Lagopus muta', rarity: 4, wiki: 'Rock_ptarmigan' },
-    { name: 'Auerhoen', latin: 'Tetrao urogallus', rarity: 5, wiki: 'Western_capercaillie' },
+    { name: 'Fazant', latin: 'Phasianus colchicus', gaelic: 'Easag', rarity: 2, wiki: 'Common_pheasant' },
+    { name: 'Schots moerassneeuwhoen', latin: 'Lagopus lagopus scotica', gaelic: 'Cearc-fhraoich', rarity: 3, wiki: 'Red_grouse' },
+    { name: 'Alpensneeuwhoen', latin: 'Lagopus muta', gaelic: 'Tàrmachan', rarity: 4, wiki: 'Rock_ptarmigan' },
+    { name: 'Auerhoen (capercaillie)', latin: 'Tetrao urogallus', gaelic: 'Capall-coille', rarity: 5, wiki: 'Western_capercaillie' },
   ]},
-  { name: 'Zwaluwen & gierzwaluwen', icon: '🐦', animals: [
-    { name: 'Boerenzwaluw', latin: 'Hirundo rustica', rarity: 2, wiki: 'Barn_swallow' },
-    { name: 'Huiszwaluw', latin: 'Delichon urbicum', rarity: 2, wiki: 'Common_house_martin' },
-    { name: 'Oeverzwaluw', latin: 'Riparia riparia', rarity: 3, wiki: 'Sand_martin' },
-    { name: 'Gierzwaluw', latin: 'Apus apus', rarity: 2, wiki: 'Common_swift' },
+  { name: 'Bos- & tuinvogels', icon: '🐦', animals: [
+    { name: 'Roodborst', latin: 'Erithacus rubecula', gaelic: 'Brù-dhearg', rarity: 1, wiki: 'European_robin' },
+    { name: 'Merel', latin: 'Turdus merula', gaelic: 'Lon-dubh', rarity: 1, wiki: 'Common_blackbird' },
+    { name: 'Koolmees', latin: 'Parus major', gaelic: 'Currac-baintighearna', rarity: 1, wiki: 'Great_tit' },
+    { name: 'Pimpelmees', latin: 'Cyanistes caeruleus', gaelic: 'Cailleachag-cheann-gorm', rarity: 1, wiki: 'Eurasian_blue_tit' },
+    { name: 'Vink', latin: 'Fringilla coelebs', gaelic: 'Breacan-beithe', rarity: 1, wiki: 'Common_chaffinch' },
+    { name: 'Mus', latin: 'Passer domesticus', gaelic: 'Gealbhonn', rarity: 1, wiki: 'House_sparrow' },
+    { name: 'Houtduif', latin: 'Columba palumbus', gaelic: 'Calman-coille', rarity: 1, wiki: 'Common_wood_pigeon' },
+    { name: 'Spreeuw', latin: 'Sturnus vulgaris', gaelic: 'Druid', rarity: 1, wiki: 'Common_starling' },
+    { name: 'Zwarte kraai', latin: 'Corvus corone', gaelic: 'Feannag', rarity: 1, wiki: 'Carrion_crow' },
+    { name: 'Bonte kraai', latin: 'Corvus cornix', gaelic: 'Feannag-ghlas', rarity: 2, wiki: 'Hooded_crow' },
+    { name: 'Kauw', latin: 'Coloeus monedula', gaelic: 'Cathag', rarity: 1, wiki: 'Western_jackdaw' },
+    { name: 'Ekster', latin: 'Pica pica', gaelic: 'Pioghaid', rarity: 1, wiki: 'Eurasian_magpie' },
+    { name: 'Raaf', latin: 'Corvus corax', gaelic: 'Fitheach', rarity: 2, wiki: 'Common_raven' },
+    { name: 'Vlaamse gaai', latin: 'Garrulus glandarius', gaelic: 'Sgreuchag-choille', rarity: 2, wiki: 'Eurasian_jay' },
+    { name: 'Zanglijster', latin: 'Turdus philomelos', gaelic: 'Smeòrach', rarity: 2, wiki: 'Song_thrush' },
+    { name: 'Grote bonte specht', latin: 'Dendrocopos major', gaelic: 'Snagan-daraich', rarity: 2, wiki: 'Great_spotted_woodpecker' },
+    { name: 'Winterkoning', latin: 'Troglodytes troglodytes', gaelic: 'Dreathan-donn', rarity: 1, wiki: 'Eurasian_wren' },
+    { name: 'Witte kwikstaart', latin: 'Motacilla alba', gaelic: 'Breac-an-t-sìl', rarity: 2, wiki: 'White_wagtail' },
+    { name: 'Koekoek', latin: 'Cuculus canorus', gaelic: 'Cuthag', rarity: 3, wiki: 'Common_cuckoo' },
   ]},
-  { name: 'Zang- & bosvogels', icon: '🐦', animals: [
-    { name: 'Roodborst', latin: 'Erithacus rubecula', rarity: 1, wiki: 'European_robin' },
-    { name: 'Houtduif', latin: 'Columba palumbus', rarity: 1, wiki: 'Common_wood_pigeon' },
-    { name: 'Zwarte kraai', latin: 'Corvus corone', rarity: 1, wiki: 'Carrion_crow' },
-    { name: 'Bonte kraai', latin: 'Corvus cornix', rarity: 2, wiki: 'Hooded_crow' },
-    { name: 'Kauw', latin: 'Coloeus monedula', rarity: 1, wiki: 'Western_jackdaw' },
-    { name: 'Ekster', latin: 'Pica pica', rarity: 1, wiki: 'Eurasian_magpie' },
-    { name: 'Spreeuw', latin: 'Sturnus vulgaris', rarity: 1, wiki: 'Common_starling' },
-    { name: 'Koolmees', latin: 'Parus major', rarity: 1, wiki: 'Great_tit' },
-    { name: 'Pimpelmees', latin: 'Cyanistes caeruleus', rarity: 1, wiki: 'Eurasian_blue_tit' },
-    { name: 'Vink', latin: 'Fringilla coelebs', rarity: 1, wiki: 'Common_chaffinch' },
-    { name: 'Merel', latin: 'Turdus merula', rarity: 1, wiki: 'Common_blackbird' },
-    { name: 'Mus', latin: 'Passer domesticus', rarity: 1, wiki: 'House_sparrow' },
-    { name: 'Winterkoning', latin: 'Troglodytes troglodytes', rarity: 1, wiki: 'Eurasian_wren' },
-    { name: 'Heggenmus', latin: 'Prunella modularis', rarity: 1, wiki: 'Dunnock' },
-    { name: 'Witte kwikstaart', latin: 'Motacilla alba', rarity: 2, wiki: 'White_wagtail' },
-    { name: 'Gele kwikstaart', latin: 'Motacilla flava', rarity: 3, wiki: 'Western_yellow_wagtail' },
-    { name: 'Grote gele kwikstaart', latin: 'Motacilla cinerea', rarity: 3, wiki: 'Grey_wagtail' },
-    { name: 'Graspieper', latin: 'Anthus pratensis', rarity: 2, wiki: 'Meadow_pipit' },
-    { name: 'Tjiftjaf', latin: 'Phylloscopus collybita', rarity: 2, wiki: 'Common_chiffchaff' },
-    { name: 'Fitis', latin: 'Phylloscopus trochilus', rarity: 2, wiki: 'Willow_warbler' },
-    { name: 'Goudhaan', latin: 'Regulus regulus', rarity: 3, wiki: 'Goldcrest' },
-    { name: 'Boomkruiper', latin: 'Certhia familiaris', rarity: 3, wiki: 'Eurasian_treecreeper' },
-    { name: 'Tapuit', latin: 'Oenanthe oenanthe', rarity: 3, wiki: 'Northern_wheatear' },
-    { name: 'Roodborsttapuit', latin: 'Saxicola rubicola', rarity: 3, wiki: 'European_stonechat' },
-    { name: 'Paapje', latin: 'Saxicola rubetra', rarity: 4, wiki: 'Whinchat' },
-    { name: 'Putter', latin: 'Carduelis carduelis', rarity: 2, wiki: 'European_goldfinch' },
-    { name: 'Groenling', latin: 'Chloris chloris', rarity: 2, wiki: 'European_greenfinch' },
-    { name: 'Sijs', latin: 'Spinus spinus', rarity: 3, wiki: 'Eurasian_siskin' },
-    { name: 'Kneu', latin: 'Linaria cannabina', rarity: 3, wiki: 'Common_linnet' },
-    { name: 'Frater', latin: 'Linaria flavirostris', rarity: 4, wiki: 'Twite' },
-    { name: 'Geelgors', latin: 'Emberiza citrinella', rarity: 3, wiki: 'Yellowhammer' },
-    { name: 'Rietgors', latin: 'Emberiza schoeniclus', rarity: 3, wiki: 'Common_reed_bunting' },
-    { name: 'Sneeuwgors', latin: 'Plectrophenax nivalis', rarity: 4, wiki: 'Snow_bunting' },
-    { name: 'Zanglijster', latin: 'Turdus philomelos', rarity: 2, wiki: 'Song_thrush' },
-    { name: 'Koperwiek', latin: 'Turdus iliacus', rarity: 3, wiki: 'Redwing' },
-    { name: 'Vlaamse gaai', latin: 'Garrulus glandarius', rarity: 2, wiki: 'Eurasian_jay' },
-    { name: 'Bonte specht', latin: 'Dendrocopos major', rarity: 2, wiki: 'Great_spotted_woodpecker' },
-    { name: 'Goudvink', latin: 'Pyrrhula pyrrhula', rarity: 3, wiki: 'Eurasian_bullfinch' },
-    { name: 'Raaf', latin: 'Corvus corax', rarity: 3, wiki: 'Common_raven' },
-    { name: 'Schotse kruisbek', latin: 'Loxia scotica', rarity: 5, wiki: 'Scottish_crossbill' },
-    { name: 'Koekoek', latin: 'Cuculus canorus', rarity: 3, wiki: 'Common_cuckoo' },
+  { name: 'Heide- & bergvogels', icon: '🦉', animals: [
+    { name: 'Veldleeuwerik', latin: 'Alauda arvensis', gaelic: 'Uiseag', rarity: 2, wiki: 'Eurasian_skylark' },
+    { name: 'Graspieper', latin: 'Anthus pratensis', gaelic: 'Snàthadag', rarity: 2, wiki: 'Meadow_pipit' },
+    { name: 'Tapuit', latin: 'Oenanthe oenanthe', gaelic: 'Brù-gheal', rarity: 3, wiki: 'Northern_wheatear' },
+    { name: 'Roodborsttapuit', latin: 'Saxicola rubicola', gaelic: 'Clacharan', rarity: 3, wiki: 'European_stonechat' },
+    { name: 'Kievit', latin: 'Vanellus vanellus', gaelic: 'Adharcan-luachrach', rarity: 2, wiki: 'Northern_lapwing' },
+    { name: 'Wulp', latin: 'Numenius arquata', gaelic: 'Guilbneach', rarity: 2, wiki: 'Eurasian_curlew' },
+    { name: 'Goudplevier', latin: 'Pluvialis apricaria', gaelic: 'Feadag-bhuidhe', rarity: 3, wiki: 'European_golden_plover' },
+    { name: 'Reiger', latin: 'Ardea cinerea', gaelic: 'Corra-ghritheach', rarity: 2, wiki: 'Grey_heron' },
   ]},
-  { name: 'Steltlopers & weidevogels', icon: '🦩', animals: [
-    { name: 'Kievit', latin: 'Vanellus vanellus', rarity: 2, wiki: 'Northern_lapwing' },
-    { name: 'Reiger', latin: 'Ardea cinerea', rarity: 2, wiki: 'Grey_heron' },
-    { name: 'Wulp', latin: 'Numenius arquata', rarity: 3, wiki: 'Eurasian_curlew' },
-    { name: 'Tureluur', latin: 'Tringa totanus', rarity: 3, wiki: 'Common_redshank' },
-    { name: 'Goudplevier', latin: 'Pluvialis apricaria', rarity: 3, wiki: 'European_golden_plover' },
-    { name: 'Watersnip', latin: 'Gallinago gallinago', rarity: 3, wiki: 'Common_snipe' },
-    { name: 'Houtsnip', latin: 'Scolopax rusticola', rarity: 4, wiki: 'Eurasian_woodcock' },
-    { name: 'Scholekster', latin: 'Haematopus ostralegus', rarity: 2, wiki: 'Eurasian_oystercatcher' },
-  ]},
-  { name: 'Zee & water', icon: '🦭', animals: [
-    { name: 'Zilvermeeuw', latin: 'Larus argentatus', rarity: 1, wiki: 'European_herring_gull' },
-    { name: 'Kleine mantelmeeuw', latin: 'Larus fuscus', rarity: 2, wiki: 'Lesser_black-backed_gull' },
-    { name: 'Kokmeeuw', latin: 'Chroicocephalus ridibundus', rarity: 1, wiki: 'Black-headed_gull' },
-    { name: 'Aalscholver', latin: 'Phalacrocorax carbo', rarity: 2, wiki: 'Great_cormorant' },
-    { name: 'Kuifaalscholver', latin: 'Gulosus aristotelis', rarity: 3, wiki: 'European_shag' },
-    { name: 'Grijze zeehond', latin: 'Halichoerus grypus', rarity: 2, wiki: 'Grey_seal' },
-    { name: 'Gewone zeehond', latin: 'Phoca vitulina', rarity: 2, wiki: 'Harbor_seal' },
-    { name: 'Jan-van-gent', latin: 'Morus bassanus', rarity: 3, wiki: 'Northern_gannet' },
-    { name: 'Papegaaiduiker', latin: 'Fratercula arctica', rarity: 3, wiki: 'Atlantic_puffin' },
-    { name: 'Zeekoet', latin: 'Uria aalge', rarity: 3, wiki: 'Common_murre' },
-    { name: 'Alk', latin: 'Alca torda', rarity: 3, wiki: 'Razorbill' },
-    { name: 'Drieteenmeeuw', latin: 'Rissa tridactyla', rarity: 3, wiki: 'Black-legged_kittiwake' },
-    { name: 'Noordse stormvogel', latin: 'Fulmarus glacialis', rarity: 3, wiki: 'Northern_fulmar' },
-    { name: 'IJsvogel', latin: 'Alcedo atthis', rarity: 4, wiki: 'Common_kingfisher' },
-    { name: 'Bruinvis', latin: 'Phocoena phocoena', rarity: 4, wiki: 'Harbour_porpoise' },
-    { name: 'Tuimelaar', latin: 'Tursiops truncatus', rarity: 4, wiki: 'Common_bottlenose_dolphin' },
-    { name: 'Witsnuitdolfijn', latin: 'Lagenorhynchus albirostris', rarity: 5, wiki: 'White-beaked_dolphin' },
-    { name: 'Dwergvinvis', latin: 'Balaenoptera acutorostrata', rarity: 5, wiki: 'Common_minke_whale' },
-    { name: 'Orka', latin: 'Orcinus orca', rarity: 5, wiki: 'Orca' },
-    { name: 'Bultrug', latin: 'Megaptera novaeangliae', rarity: 5, wiki: 'Humpback_whale' },
+  { name: 'Zee & kust', icon: '🦭', animals: [
+    { name: 'Zilvermeeuw', latin: 'Larus argentatus', gaelic: 'Faoileag', rarity: 1, wiki: 'European_herring_gull' },
+    { name: 'Kleine mantelmeeuw', latin: 'Larus fuscus', gaelic: 'Faoileann', rarity: 2, wiki: 'Lesser_black-backed_gull' },
+    { name: 'Aalscholver', latin: 'Phalacrocorax carbo', gaelic: 'Sgarbh', rarity: 2, wiki: 'Great_cormorant' },
+    { name: 'Grijze zeehond', latin: 'Halichoerus grypus', gaelic: 'Ròn-glas', rarity: 2, wiki: 'Grey_seal' },
+    { name: 'Gewone zeehond', latin: 'Phoca vitulina', gaelic: 'Ròn', rarity: 2, wiki: 'Harbor_seal' },
+    { name: 'Jan-van-gent', latin: 'Morus bassanus', gaelic: 'Sùlair', rarity: 3, wiki: 'Northern_gannet' },
+    { name: 'Papegaaiduiker', latin: 'Fratercula arctica', gaelic: 'Buthaid', rarity: 3, wiki: 'Atlantic_puffin' },
+    { name: 'Scholekster', latin: 'Haematopus ostralegus', gaelic: 'Gille-Brìghde', rarity: 2, wiki: 'Eurasian_oystercatcher' },
+    { name: 'Tuimelaar (dolfijn)', latin: 'Tursiops truncatus', gaelic: 'Leumadair-mara', rarity: 3, wiki: 'Common_bottlenose_dolphin' },
   ]},
   { name: 'Klein & kruipend', icon: '🦔', animals: [
-    { name: 'Egel', latin: 'Erinaceus europaeus', rarity: 3, wiki: 'European_hedgehog' },
-    { name: 'Bruine kikker', latin: 'Rana temporaria', rarity: 2, wiki: 'Common_frog' },
-    { name: 'Pad', latin: 'Bufo bufo', rarity: 3, wiki: 'Common_toad' },
-    { name: 'Levendbarende hagedis', latin: 'Zootoca vivipara', rarity: 3, wiki: 'Viviparous_lizard' },
-    { name: 'Hazelworm', latin: 'Anguis fragilis', rarity: 4, wiki: 'Slowworm' },
-    { name: 'Adder', latin: 'Vipera berus', rarity: 4, wiki: 'Vipera_berus' },
-  ]},
-  { name: 'Insecten & spinnen', icon: '🐝', animals: [
-    { name: 'Honingbij', latin: 'Apis mellifera', rarity: 1, wiki: 'Western_honey_bee' },
-    { name: 'Aardhommel', latin: 'Bombus terrestris', rarity: 1, wiki: 'Bombus_terrestris' },
-    { name: 'Steenhommel', latin: 'Bombus lapidarius', rarity: 2, wiki: 'Bombus_lapidarius' },
-    { name: 'Boomhommel', latin: 'Bombus hypnorum', rarity: 2, wiki: 'Tree_bumblebee' },
-    { name: 'Wesp', latin: 'Vespula vulgaris', rarity: 1, wiki: 'Vespula_vulgaris' },
-    { name: 'Dagpauwoog', latin: 'Aglais io', rarity: 2, wiki: 'Aglais_io' },
-    { name: 'Atalanta', latin: 'Vanessa atalanta', rarity: 2, wiki: 'Vanessa_atalanta' },
-    { name: 'Distelvlinder', latin: 'Vanessa cardui', rarity: 3, wiki: 'Vanessa_cardui' },
-    { name: 'Citroenvlinder', latin: 'Gonepteryx rhamni', rarity: 3, wiki: 'Gonepteryx_rhamni' },
-    { name: 'Klein koolwitje', latin: 'Pieris rapae', rarity: 1, wiki: 'Pieris_rapae' },
-    { name: 'Oranjetipje', latin: 'Anthocharis cardamines', rarity: 3, wiki: 'Anthocharis_cardamines' },
-    { name: 'Bont zandoogje', latin: 'Pararge aegeria', rarity: 2, wiki: 'Pararge_aegeria' },
-    { name: 'Heideblauwtje', latin: 'Plebejus argus', rarity: 4, wiki: 'Plebejus_argus' },
-    { name: 'Lieveheersbeestje', latin: 'Coccinella septempunctata', rarity: 1, wiki: 'Coccinella_septempunctata' },
-    { name: 'Libel (gewone oeverlibel)', latin: 'Libellula depressa', rarity: 3, wiki: 'Libellula_depressa' },
-    { name: 'Waterjuffer (azuurwater)', latin: 'Coenagrion puella', rarity: 3, wiki: 'Coenagrion_puella' },
-    { name: 'Glazenmaker', latin: 'Aeshna juncea', rarity: 4, wiki: 'Aeshna_juncea' },
-    { name: 'Sprinkhaan', latin: 'Chorthippus brunneus', rarity: 2, wiki: 'Chorthippus_brunneus' },
-    { name: 'Oorworm', latin: 'Forficula auricularia', rarity: 2, wiki: 'Forficula_auricularia' },
-    { name: 'Kruisspin', latin: 'Araneus diadematus', rarity: 2, wiki: 'European_garden_spider' },
-    { name: 'Wolfsspin', latin: 'Pardosa', rarity: 3, wiki: 'Pardosa' },
-    { name: 'Schotse muggen (midges)', latin: 'Culicoides impunctatus', rarity: 1, wiki: 'Culicoides_impunctatus' },
+    { name: 'Bruine kikker', latin: 'Rana temporaria', gaelic: 'Losgann', rarity: 2, wiki: 'Common_frog' },
+    { name: 'Levendbarende hagedis', latin: 'Zootoca vivipara', gaelic: 'Dearc-luachrach', rarity: 3, wiki: 'Viviparous_lizard' },
+    { name: 'Adder', latin: 'Vipera berus', gaelic: 'Nathair-nimhe', rarity: 4, wiki: 'Vipera_berus' },
+    { name: 'Schotse muggen (midges)', latin: 'Culicoides impunctatus', gaelic: 'Meanbh-chuileag', rarity: 1, wiki: 'Culicoides_impunctatus' },
   ]},
   { name: '🚗 Road kills', icon: '💀', animals: [
-    { name: 'Fazant (platgereden)', latin: 'Phasianus colchicus', rarity: 1, wiki: 'Common_pheasant' },
-    { name: 'Konijn (platgereden)', latin: 'Oryctolagus cuniculus', rarity: 1, wiki: 'European_rabbit' },
-    { name: 'Egel (platgereden)', latin: 'Erinaceus europaeus', rarity: 2, wiki: 'European_hedgehog' },
-    { name: 'Eekhoorn (platgereden)', latin: 'Sciurus', rarity: 2, wiki: 'Eastern_gray_squirrel' },
-    { name: 'Schaap (langs de weg)', latin: 'Ovis aries', rarity: 2, wiki: 'Sheep' },
-    { name: 'Vos (platgereden)', latin: 'Vulpes vulpes', rarity: 3, wiki: 'Red_fox' },
-    { name: 'Das (platgereden)', latin: 'Meles meles', rarity: 3, wiki: 'European_badger' },
-    { name: 'Ree (langs de weg)', latin: 'Capreolus capreolus', rarity: 3, wiki: 'Roe_deer' },
-    { name: 'Edelhert (langs de weg)', latin: 'Cervus elaphus', rarity: 4, wiki: 'Red_deer' },
-    { name: 'Eend (platgereden)', latin: 'Anas platyrhynchos', rarity: 3, wiki: 'Mallard' },
-    { name: 'Kraai (platgereden)', latin: 'Corvus corone', rarity: 2, wiki: 'Carrion_crow' },
-    { name: 'Mol (platgereden)', latin: 'Talpa europaea', rarity: 3, wiki: 'European_mole' },
+    { name: 'Fazant (platgereden)', latin: 'Phasianus colchicus', gaelic: 'Easag mharbh', rarity: 1, wiki: 'Common_pheasant' },
+    { name: 'Konijn (platgereden)', latin: 'Oryctolagus cuniculus', gaelic: 'Coineanach marbh', rarity: 1, wiki: 'European_rabbit' },
+    { name: 'Egel (platgereden)', latin: 'Erinaceus europaeus', gaelic: 'Gràineag mharbh', rarity: 2, wiki: 'European_hedgehog' },
+    { name: 'Schaap (langs de weg)', latin: 'Ovis aries', gaelic: 'Caora mharbh', rarity: 2, wiki: 'Sheep' },
+    { name: 'Vos (platgereden)', latin: 'Vulpes vulpes', gaelic: 'Sionnach marbh', rarity: 3, wiki: 'Red_fox' },
+    { name: 'Das (platgereden)', latin: 'Meles meles', gaelic: 'Broc marbh', rarity: 3, wiki: 'European_badger' },
+    { name: 'Ree (langs de weg)', latin: 'Capreolus capreolus', gaelic: 'Earb mharbh', rarity: 3, wiki: 'Roe_deer' },
+    { name: 'Edelhert (langs de weg)', latin: 'Cervus elaphus', gaelic: 'Fiadh marbh', rarity: 4, wiki: 'Red_deer' },
   ]}
 ];
 
 const RARITY_LABELS = ['', 'Zeer algemeen', 'Algemeen', 'Soms', 'Zeldzaam', 'Zeer zeldzaam'];
 
+// 6 levels — meest Schots-klinkende namen behouden, met Gaelic vertalingen
+// Met 75 dieren totaal: ~13 dieren per level
 const LEVELS = [
-  { roman: 'I',    nl: 'Wandelaar van de Heide',    en: 'Heath Wanderer',    trophy: '🥾', tagline: 'De eerste stappen op het pad. Het avontuur begint.' },
-  { roman: 'II',   nl: 'Veldwachter',                en: 'Field Watcher',     trophy: '👁️', tagline: 'Tien dieren in je veldgids — een waardige stap.' },
-  { roman: 'III',  nl: 'Verkenner van de Glen',      en: 'Glen Scout',        trophy: '🧭', tagline: 'De valleien beginnen hun geheimen prijs te geven.' },
-  { roman: 'IV',   nl: 'Volger van Sporen',          en: 'Tracker of Tracks', trophy: '🐾', tagline: 'Pootafdrukken, veren, geluiden — niets ontgaat je.' },
-  { roman: 'V',    nl: 'Bosfluisteraar',             en: 'Forest Whisperer',  trophy: '🌲', tagline: 'De bossen kennen je naam. De dieren komen dichterbij.' },
-  { roman: 'VI',   nl: 'Hertenkenner',               en: 'Stag Reader',       trophy: '🦌', tagline: 'Je leest het gewei als een boek, en de wind als een kaart.' },
-  { roman: 'VII',  nl: 'Meester van de Munro',       en: 'Munro Master',      trophy: '⛰️', tagline: 'Hoog op de heuvels, waar weinigen komen — daar ben jij thuis.' },
-  { roman: 'VIII', nl: 'Adelaarsoog',                en: 'Eagle Eye',         trophy: '🦅', tagline: 'Je blik mist niets. Zelfs de zeldzaamste vleugel verraadt zich.' },
-  { roman: 'IX',   nl: 'Hooglandhoeder',             en: 'Highland Warden',   trophy: '🛡️', tagline: 'De wildernis erkent je als beschermer. Een eer onder weinigen.' },
-  { roman: 'X',    nl: 'Laird van de Wildernis',     en: 'Laird of the Wild', trophy: '👑', tagline: 'Heerser onder de wolken. De Highlands zijn jouw rijk.' },
+  { roman: 'I',   nl: 'Wandelaar van de Heide',    gaelic: 'Coisiche an Fhraoich',    trophy: '🥾', tagline: 'De eerste stappen op het pad. Het avontuur begint.' },
+  { roman: 'II',  nl: 'Verkenner van de Glen',     gaelic: 'Rabhadair na Glinne',     trophy: '🧭', tagline: 'De valleien beginnen hun geheimen prijs te geven.' },
+  { roman: 'III', nl: 'Bosfluisteraar',            gaelic: 'Cogarsaiche na Coille',   trophy: '🌲', tagline: 'De bossen kennen je naam. De dieren komen dichterbij.' },
+  { roman: 'IV',  nl: 'Hertenkenner',              gaelic: 'Eòlaiche nam Fiadh',      trophy: '🦌', tagline: 'Je leest het gewei als een boek, en de wind als een kaart.' },
+  { roman: 'V',   nl: 'Adelaarsoog',               gaelic: 'Sùil an Iolaire',         trophy: '🦅', tagline: 'Je blik mist niets. Zelfs de zeldzaamste vleugel verraadt zich.' },
+  { roman: 'VI',  nl: 'Laird van de Wildernis',    gaelic: 'Tighearna na Fàsaich',    trophy: '👑', tagline: 'Heerser onder de wolken. De Highlands zijn jouw rijk.' },
 ];
+const LEVEL_THRESHOLD = 13; // dieren per level
 
 function getLevelForCount(count) {
-  const idx = Math.min(Math.floor(count / 10), LEVELS.length - 1);
+  const idx = Math.min(Math.floor(count / LEVEL_THRESHOLD), LEVELS.length - 1);
   return { index: idx, level: LEVELS[idx] };
 }
 function updateLevelBadge(spottedCount) {
   const { index, level } = getLevelForCount(spottedCount);
   document.getElementById('levelRoman').textContent = level.roman;
   document.getElementById('levelNameNl').textContent = level.nl;
-  document.getElementById('levelNameEn').textContent = level.en;
+  document.getElementById('levelNameEn').textContent = level.gaelic;
   if (index >= LEVELS.length - 1) {
     document.getElementById('levelProgressBar').style.width = '100%';
     document.getElementById('levelProgressText').textContent = '✦ Hoogste rang behaald ✦';
   } else {
-    const inLevel = spottedCount - (index * 10);
-    const pct = (inLevel / 10) * 100;
+    const inLevel = spottedCount - (index * LEVEL_THRESHOLD);
+    const pct = (inLevel / LEVEL_THRESHOLD) * 100;
     document.getElementById('levelProgressBar').style.width = pct + '%';
-    document.getElementById('levelProgressText').textContent = inLevel + ' / 10 dieren naar volgende rang';
+    document.getElementById('levelProgressText').textContent = inLevel + ' / ' + LEVEL_THRESHOLD + ' dieren naar volgende rang';
   }
 }
 function showLevelUp(newIndex) {
@@ -526,7 +448,7 @@ function showLevelUp(newIndex) {
   document.getElementById('levelupTrophy').textContent = level.trophy;
   document.getElementById('levelupRoman').textContent = level.roman;
   document.getElementById('levelupName').textContent = level.nl;
-  document.getElementById('levelupNameEn').textContent = level.en;
+  document.getElementById('levelupNameEn').textContent = level.gaelic;
   document.getElementById('levelupTagline').textContent = level.tagline;
   document.getElementById('levelupOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -557,11 +479,11 @@ function closeLevelUp() {
   document.body.style.overflow = '';
 }
 
-const STORAGE_KEY = 'highlands-spotted-v2';
+const STORAGE_KEY = 'highlands-spotted-v3';
 const PINS_KEY = 'highlands-pins-v1';
-const IMAGE_CACHE_KEY = 'highlands-images-v4';
+const IMAGE_CACHE_KEY = 'highlands-images-v5';
 const SORT_KEY = 'highlands-sort';
-const LEVEL_KEY = 'highlands-last-level';
+const LEVEL_KEY = 'highlands-last-level-v2';
 const EXPANDED_KEY = 'highlands-expanded-cats';
 const HIGHLANDS_CENTER = [57.0, -4.5];
 const HIGHLANDS_ZOOM = 8;
@@ -576,7 +498,7 @@ let map = null;
 let currentPinAnimal = null;
 let pinningMode = false;
 let lastLevelIndex = 0;
-let expandedCategories = new Set(); // Welke categorieën zijn uitgeklapt
+let expandedCategories = new Set();
 
 function openDB() { return new Promise((resolve) => { try { const req = indexedDB.open('highlands-spotter', 1); req.onupgradeneeded = (e) => { const d = e.target.result; if (!d.objectStoreNames.contains('state')) d.createObjectStore('state'); }; req.onsuccess = (e) => { db = e.target.result; resolve(db); }; req.onerror = () => resolve(null); } catch(e) { resolve(null); } }); }
 async function dbGet(key) { if (!db) return null; return new Promise((r) => { try { const tx = db.transaction('state', 'readonly'); const req = tx.objectStore('state').get(key); req.onsuccess = () => r(req.result); req.onerror = () => r(null); } catch(e) { r(null); } }); }
@@ -588,6 +510,11 @@ async function loadState() {
   const sources = [];
   try { const v = await dbGet(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
   try { const v = localStorage.getItem(STORAGE_KEY); if (v) sources.push(v); } catch(e) {}
+  // Fallback: laad ook v2 als v3 nog leeg is — voor compat met je eerdere data
+  if (sources.length === 0) {
+    try { const v = await dbGet('highlands-spotted-v2'); if (v) sources.push(v); } catch(e) {}
+    try { const v = localStorage.getItem('highlands-spotted-v2'); if (v) sources.push(v); } catch(e) {}
+  }
   const ck = getCookie(STORAGE_KEY); if (ck) sources.push(ck);
   let best = null, bestCount = -1;
   for (const s of sources) { try { const obj = JSON.parse(s); const c = Object.keys(obj).length; if (c > bestCount) { bestCount = c; best = obj; } } catch(e) {} }
@@ -604,13 +531,16 @@ async function loadState() {
   if (!imageCache || Object.keys(imageCache).length === 0) {
     try { const ls = localStorage.getItem(IMAGE_CACHE_KEY); if (ls) imageCache = JSON.parse(ls); } catch(e) { imageCache = {}; }
   }
+  // Hergebruik oude images-v4 cache als nieuwe leeg is
+  if (Object.keys(imageCache).length === 0) {
+    try { const ls = localStorage.getItem('highlands-images-v4'); if (ls) imageCache = JSON.parse(ls); } catch(e) {}
+  }
   try { const s = localStorage.getItem(SORT_KEY); if (s === 'rare' || s === 'common') sortMode = s; } catch(e) {}
   
   try { const stored = localStorage.getItem(LEVEL_KEY); if (stored !== null) lastLevelIndex = parseInt(stored, 10) || 0; } catch(e) {}
   const currentLevelIdx = getLevelForCount(Object.keys(spotted).length).index;
   if (lastLevelIndex < currentLevelIdx) lastLevelIndex = currentLevelIdx;
   
-  // Expanded categorieën — standaard alles dicht
   try {
     const stored = localStorage.getItem(EXPANDED_KEY);
     if (stored) {
@@ -666,21 +596,15 @@ function toggleCategory(catName) {
   if (expandedCategories.has(catName)) expandedCategories.delete(catName);
   else expandedCategories.add(catName);
   saveExpanded();
-  // Update alleen DOM, geen volledige re-render
   const catEl = document.querySelector('.category[data-name="' + CSS.escape(catName) + '"]');
   if (catEl) catEl.classList.toggle('expanded', expandedCategories.has(catName));
   updateExpandAllButton();
 }
-
 function toggleExpandAll() {
-  // Tel alleen zichtbare (niet-verborgen door zoekterm) categorieën
   const allCatNames = data.map(c => c.name);
   const allOpen = allCatNames.every(n => expandedCategories.has(n));
-  if (allOpen) {
-    expandedCategories.clear();
-  } else {
-    allCatNames.forEach(n => expandedCategories.add(n));
-  }
+  if (allOpen) expandedCategories.clear();
+  else allCatNames.forEach(n => expandedCategories.add(n));
   saveExpanded();
   document.querySelectorAll('.category').forEach(catEl => {
     const name = catEl.dataset.name;
@@ -688,7 +612,6 @@ function toggleExpandAll() {
   });
   updateExpandAllButton();
 }
-
 function updateExpandAllButton() {
   const allOpen = data.every(c => expandedCategories.has(c.name));
   document.getElementById('expandAllBtn').textContent = allOpen ? 'Alles in' : 'Alles uit';
@@ -720,10 +643,8 @@ function render() {
         '<svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
       '</div>' +
       '<div class="category-body"><div class="animal-list"></div></div>';
-    
     const header = catEl.querySelector('.category-header');
     header.addEventListener('click', () => toggleCategory(cat.name));
-    
     const list = catEl.querySelector('.animal-list');
     sorted.forEach(animal => {
       const key = makeKey(cat.name, animal.name);
@@ -738,12 +659,13 @@ function render() {
       else imgHtml = '<div class="img-loading" data-wiki="' + animal.wiki + '"></div>';
       const el = document.createElement('div');
       el.className = 'animal' + (isSpotted ? ' spotted' : '');
-      el.dataset.searchText = (animal.name + ' ' + animal.latin).toLowerCase();
+      el.dataset.searchText = (animal.name + ' ' + animal.latin + ' ' + (animal.gaelic || '')).toLowerCase();
       el.innerHTML =
         '<div class="animal-img-wrap">' + imgHtml + '</div>' +
         '<div class="animal-info">' +
           '<div class="animal-name">' + animal.name + '</div>' +
           '<div class="animal-latin">' + animal.latin + '</div>' +
+          (animal.gaelic ? '<div class="animal-gaelic">' + animal.gaelic + '</div>' : '') +
           '<div class="rarity">' + dots + pinBadge + '</div>' +
         '</div>' +
         '<div class="animal-actions">' +
@@ -856,11 +778,9 @@ function applyFilter() {
     });
     cat.classList.toggle('hidden', catVisible === 0);
     totalVisible += catVisible;
-    // Bij een actief zoekfilter: matchende categorieën automatisch uitklappen voor zichtbaarheid
-    if (term.length > 0 && catVisible > 0 && catVisible < cat.querySelectorAll('.animal').length + 1) {
+    if (term.length > 0 && catVisible > 0) {
       cat.classList.add('expanded');
     } else if (term.length === 0) {
-      // Zoekterm leeg: terug naar opgeslagen voorkeur
       cat.classList.toggle('expanded', expandedCategories.has(cat.dataset.name));
     }
   });
@@ -877,6 +797,7 @@ async function openLightbox(animal, categoryName) {
   const img = document.getElementById('lightboxImg');
   document.getElementById('lightboxTitle').textContent = animal.name;
   document.getElementById('lightboxLatin').textContent = animal.latin;
+  document.getElementById('lightboxGaelic').textContent = animal.gaelic ? '· ' + animal.gaelic + ' ·' : '';
   const dots = Array.from({length: 5}, (_, i) => '<span class="rarity-dot ' + (i < animal.rarity ? 'filled' : '') + '"></span>').join('');
   document.getElementById('lightboxRarity').innerHTML = dots;
   document.getElementById('lightboxRarityLabel').textContent = RARITY_LABELS[animal.rarity];
@@ -969,7 +890,6 @@ function openSpotMap() {
   else { map.setView(HIGHLANDS_CENTER, HIGHLANDS_ZOOM); }
   document.getElementById('mapToolbar').innerHTML = '<button class="map-tool-btn" onclick="closeMap()">Sluit</button>';
 }
-
 function startPinning() {
   if (!currentLightboxAnimal || !currentLightboxCategory) return;
   currentPinAnimal = { animal: currentLightboxAnimal, categoryName: currentLightboxCategory };
@@ -997,7 +917,6 @@ function startPinning() {
   map.off('click');
   map.on('click', onMapClickToPin);
 }
-
 async function onMapClickToPin(e) { if (!pinningMode || !currentPinAnimal) return; const lat = e.latlng.lat; const lng = e.latlng.lng; await addPin(lat, lng); }
 async function addPin(lat, lng) {
   if (!currentPinAnimal) return;
